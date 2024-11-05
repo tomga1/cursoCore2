@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - cursoCoreMVC</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/cursoCoreMVC.styles.css" asp-append-version="true" />
+    <script src="https://kit.fontawesome.com/6c535df5ee.js" crossorigin="anonymous"></script>
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh;">
+    <header>
+        <nav class="navbar navbar-expand-lg" style="background-color: #333; color: #fff;">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#" style="color: #ffb703;">Hamburguesas Deluxe</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" asp-controller="Home" asp-action="Index" style="color: #fff;">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Privacy" style="color: #fff;">Nosotros</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Listado" style="color: #fff;">Listado</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="" style="color: #fff;">Trabaja con nosotros!</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #fff;">
+                                Dropdown
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                        </li>
+                        
+                    </ul>
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-light" style="margin-left: 10px" type="submit">Search</button>
+                        <button class="btn btn-outline-light" style="margin-left: 10px" type="submit">Login</button>
+
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container" style="flex: 1;">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer style="background-color: #333; color: #fff; padding: 40px 20px; width: 100%; margin-top: 40px;">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-around; max-width: 1200px; margin: auto; text-align: center;">
+
+            <div style="flex: 1; min-width: 250px; padding: 10px;">
+                <h3 style="color: #ffb703;">Sobre Nosotros</h3>
+                <p>Somos apasionados de la buena comida y las mejores hamburguesas. Usamos ingredientes frescos y de calidad para ofrecerte una experiencia única en cada bocado.</p>
+            </div>
+
+            <div style="flex: 1; min-width: 250px; padding: 10px;">
+                <h3 style="color: #ffb703;">Contacto</h3>
+                <p>Email: contacto@hamburguesas.com</p>
+                <p>Teléfono: +54 11 1234 5678</p>
+                <p>Dirección: Av. Principal 1234, Ciudad</p>
+
+            </div>
+
+            <div style="flex: 1; min-width: 250px; padding: 10px;">
+                <h3 style="color: #ffb703;">Síguenos</h3>
+                <div style="display: flex; justify-content: center; gap: 15px;">
+                    <a href="#" style="color: #ffb703;"><i class="fas fa-home fa-2x"></i></a>
+                    <a href="#" style="color: #ffb703;"><i class="fab fa-instagram fa-2x"></i></a>
+                    <a href="#" style="color: #ffb703;"><i class="fab fa-twitter fa-2x"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <hr style="margin: 20px 0; border-color: #555;">
+
+        <p style="text-align: center; font-size: 14px;">&copy; 2024 Hamburguesas "". Todos los derechos reservados.</p>
+    </footer>
+
+    <a href="https://wa.me/5411123456789" target="_blank" class="whatsapp-button">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

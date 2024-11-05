@@ -1,0 +1,40 @@
+﻿@model List<Productos>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@* <div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div> *@
+
+
+<div class="container mt-5">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card" style="width: 100%;">
+                    <img src="@item.imagen" class="card-img-top" alt="@item.nombre" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.nombre</h5>
+                        <p class="card-text">@item.descripcion</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                     @*    <li class="list-group-item">An item</li>
+                        <li class="list-group-item">Precio</li> *@
+                        <li style="font-size: 20px;" class="list-group-item">Precio $@item.precio</li>
+                    </ul>
+                    <div class="card-body d-flex justify-content-center">
+                        <a href="#" style="margin-right: 10px;" class="btn btn-dark">+Info</a>
+                        <a href="#" class="btn btn-dark">Pedir</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+

@@ -1,0 +1,55 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+.navbar-nav .nav-item {
+    margin-right: 20px; /* Ajusta el valor para el espacio deseado */
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+
+.card-body a{
+    font-size: 20px;
+}
+
+.main-content {
+    padding-bottom: 80px;
+}
+
+.container {
+    min-height: calc(100vh - 200px);
+}
+
+.whatsapp-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #25D366;
+    color: white;
+    border-radius: 70%;
+    padding: 15px;
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    text-decoration: none;
+}
+
+    .whatsapp-button:hover {
+        background-color: white; /* Color un poco más oscuro al pasar el cursor */
+    }
+
