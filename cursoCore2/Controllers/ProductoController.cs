@@ -1,7 +1,10 @@
-﻿using cursoCore2.Models;
+﻿using cursoCore2.Data;
+using cursoCore2API.Repositories;
+using cursoCore2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,13 +14,19 @@ namespace cursoCore2.Controllers
     [ApiController]
     public class ProductoController : ControllerBase
     {
+        private readonly ProductoRepository _repository;
 
-        private readonly AplicationDbContext _context;
-        
-        public ProductoController(AplicationDbContext context)
+        public ProductoController(ProductoRepository repository)
         {
-            _context = context; 
+            _repository = repository;
         }
+
+        //private readonly AplicationDbContext _context;
+        
+        //public ProductoController(AplicationDbContext context)
+        //{
+        //    _context = context; 
+        //}
 
 
         // GET: api/<ProductoController>
@@ -26,7 +35,7 @@ namespace cursoCore2.Controllers
         {
             try
             {
-                var listaProductos = await _context.productos.ToListAsync();
+                var listaProductos = _repository.Get();
                 return Ok(listaProductos);
             }
             catch (Exception ex)
@@ -36,30 +45,21 @@ namespace cursoCore2.Controllers
             }
         }
 
-        //// GET api/<ProductoController>/5
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> Get()
-        //{
-        //    try
-        //    {
-        //        var listaProductos = await _context.productos.ToListAsync();
-        //        return Ok(listaProductos);
-        //    }
-        //    catch (Exception ex)
-        //    {
+        // GET api/<ProductoController>/5
+        [HttpGet("{titleForSearch}")]
+        public IActionResult Get(string titleForSearch)
+        {
+            return Ok(_repository.Get(titleForSearch));
+        }
+        
 
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
-
-        // POST api/<ProductoController>
+        //POST api/<ProductoController>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Producto producto)
         {
             try
             {
-                _context.Add(producto);
-                await _context.SaveChangesAsync();
+                _repository.Add(producto);
                 return Ok(producto);
             }
             catch (Exception ex)
@@ -75,13 +75,21 @@ namespace cursoCore2.Controllers
         {
             try
             {
-                if(id != producto.idProducto)
+                var productoExistente = _repository.Get(id);
+
+                if (productoExistente == null)
                 {
-                    return NotFound();
+                    return NotFound(new { message = "Producto no encontrado." });
                 }
 
-                _context.Update(producto);
-                await _context.SaveChangesAsync();
+                productoExistente.nombre = producto.nombre;
+                productoExistente.descripcion = producto.descripcion;
+                productoExistente.stock = producto.stock;
+                productoExistente.precio = producto.precio;
+                productoExistente.imagen = producto.imagen;
+
+                await _repository.SaveChangesAsync();
+
                 return Ok(new { message = "El producto fue actualizado con éxito!" });
 
             }
@@ -92,22 +100,23 @@ namespace cursoCore2.Controllers
             }
         }
 
-        // DELETE api/<ProductoController>/5
+
+
+
+        //// DELETE api/<ProductoController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                var producto = await _context.productos.FindAsync(id);
+                var productoEliminado = _repository.Remove(id); 
 
-                if(producto == null)
+                if (productoEliminado == null)
                 {
                     return NotFound();
                 }
 
-                _context.productos.Remove(producto);
-                await _context.SaveChangesAsync();
-                return Ok(new { message = "El producto fue eliminado con éxito! " });
+                return Ok(new { message = "El producto fue eliminado con éxito!", producto = productoEliminado });
 
             }
             catch (Exception ex)
