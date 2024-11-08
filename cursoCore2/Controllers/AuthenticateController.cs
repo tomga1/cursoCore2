@@ -29,24 +29,24 @@ namespace cursoCore2API.Controllers
             if (userAuthenticated is not null)
             {
 
-                //var securityPassword = new SymmetricSecurityKey(HeaderEncodingSelector.ASCCI.GetBytes(_config["Authentication:SecretForKey"]));
+                var securityPassword = new SymmetricSecurityKey(Encoding.ASCCI.GetBytes(_config["Authentication:SecretForKey"]));
 
-                //SigningCredentials = new SigningCredentials(securityPassword, SecurityAlgorithms.HmacSha256);
+                SigningCredentials signature= new SigningCredentials(securityPassword, SecurityAlgorithms.HmacSha256);
 
-                //var claimsForToken = new List<Claim>();
-                //claimsForToken.Add(new Claim("sub", User.Ident.ToString()));
-                //claimsForToken.Add(new Claim("given_name", User.Email));
-                //claimsForToken.Add(new Claim("role", User.ro.Tostring()));
+                var claimsForToken = new List<Claim>();
+                claimsForToken.Add(new Claim("sub", userAuthenticated.Id.ToString()));
+                claimsForToken.Add(new Claim("given_name", userAuthenticated.Username));
+                //claimsForToken.Add(new Claim("role", userAuthenticated.rol.Tostring())); AUTENTICAR ROL DESDE TOKEN
 
-                //var jwtSecurityToken = new JwtSecurityToken(
-                //    _config["Authentication:Issuer"],
-                //    _config["Authentication:Audience"],
-                //    claimsForToken,
-                //    DateTime.UtcNow,
-                //    DateTime.UtcNow.AddHours(1))
+                var jwtSecurityToken = new JwtSecurityToken(
+                    _config["Authentication:Issuer"],
+                    _config["Authentication:Audience"],
+                    claimsForToken,
+                    DateTime.UtcNow,
+                    DateTime.UtcNow.AddHours(1),
+                    signature);
 
-
-
+                string tokenToReturn = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
 
                 return Ok("llaveToken");
 
