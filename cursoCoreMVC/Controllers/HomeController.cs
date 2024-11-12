@@ -16,6 +16,12 @@ namespace cursoCoreMVC.Controllers
             _serviceAPI = servicioAPI;
         }
 
+        public IActionResult Login()
+        {
+            return View();  
+        }
+
+
         public async Task<IActionResult> Index()
         {
 
