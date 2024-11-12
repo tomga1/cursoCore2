@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace cursoCore2API.Controllers
 {
@@ -14,10 +15,12 @@ namespace cursoCore2API.Controllers
     {
 
         private readonly UserRepository _userRepository;
+        private readonly IConfiguration _config;
 
-        public AuthenticateController(UserRepository userRepository)
+        public AuthenticateController(UserRepository userRepository, IConfiguration config)
         {
             _userRepository = userRepository;
+            _config = config;
         }
 
 
@@ -29,7 +32,7 @@ namespace cursoCore2API.Controllers
             if (userAuthenticated is not null)
             {
 
-                var securityPassword = new SymmetricSecurityKey(Encoding.ASCCI.GetBytes(_config["Authentication:SecretForKey"]));
+                var securityPassword = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_config["Authentication:SecretForKey"]));
 
                 SigningCredentials signature= new SigningCredentials(securityPassword, SecurityAlgorithms.HmacSha256);
 
@@ -48,10 +51,10 @@ namespace cursoCore2API.Controllers
 
                 string tokenToReturn = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
 
-                return Ok("llaveToken");
+                return Ok(tokenToReturn);
 
             }
-            return Unauthorized();
+             return Unauthorized();
         }
     }
 
