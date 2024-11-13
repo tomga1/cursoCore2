@@ -20,7 +20,10 @@ namespace cursoCore2API.Repositories
 
         }
 
-
+        public List<User> GetUsers()
+        {
+            return _context.users.ToList(); 
+        }
 
     }
 }

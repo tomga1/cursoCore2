@@ -2,6 +2,7 @@
 using cursoCore2API.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -65,6 +66,23 @@ namespace cursoCore2API.Controllers
             }
              return Unauthorized();
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetUsers()
+        {
+            try
+            {
+                var listaUsuarios = _userRepository.GetUsers();
+                return Ok(listaUsuarios);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 
     //[HttpPost]
