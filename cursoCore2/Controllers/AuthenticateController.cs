@@ -39,7 +39,16 @@ namespace cursoCore2API.Controllers
                 var claimsForToken = new List<Claim>();
                 claimsForToken.Add(new Claim("sub", userAuthenticated.Id.ToString()));
                 claimsForToken.Add(new Claim("given_name", userAuthenticated.Username));
-                //claimsForToken.Add(new Claim("role", userAuthenticated.rol.Tostring())); AUTENTICAR ROL DESDE TOKEN
+                if (userAuthenticated.Admin)
+                {
+                    claimsForToken.Add(new Claim("role", "admin"));
+                }
+                else
+                {
+                    claimsForToken.Add(new Claim("role", "user"));
+
+                }
+
 
                 var jwtSecurityToken = new JwtSecurityToken(
                     _config["Authentication:Issuer"],
