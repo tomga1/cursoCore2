@@ -7,7 +7,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IService_API, Service_API>();
 
-
+ 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

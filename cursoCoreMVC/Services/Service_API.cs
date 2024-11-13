@@ -1,4 +1,5 @@
 ﻿using cursoCoreMVC.Models;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text; 
@@ -8,23 +9,56 @@ namespace cursoCoreMVC.Services
     public class Service_API : IService_API
     {
         private static string? _baseurl; 
+        private static string? _username;
+        private static string? _password;
+        private static string? _token;
 
         public Service_API()
         {
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
 
-            _baseurl = builder.GetSection("ApiSettings:baseUrl").Value; 
+            _baseurl = builder.GetSection("ApiSettings:baseUrl").Value;
+            _username = builder.GetSection("ApiSettings:Username").Value;
+            _password = builder.GetSection("ApiSettings:Password").Value;
 
 
         }
+
+        public async Task Authenticate()
+        {
+            var cliente = new HttpClient();
+            cliente.BaseAddress = new Uri(_baseurl);
+
+            var credenciales = new Credencial() { Username = _username, Password = _password };
+            var content = new StringContent(JsonConvert.SerializeObject(credenciales), Encoding.UTF8, "application/json");
+
+            var response = await cliente.PostAsync("api/Authenticate", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Obtiene directamente el token como string
+                var json_respuesta = await response.Content.ReadAsStringAsync();
+                _token = json_respuesta.Trim('"'); // Remueve comillas si es necesario
+            }
+            else
+            {
+                Console.WriteLine("Error en la autenticación.");
+            }
+        }
+
+
+
 
         public async Task<List<Productos>> Lista()
         {
             List<Productos> lista = new List<Productos>();
 
-            using(var client = new HttpClient())
+            await Authenticate();
+
+            using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(_baseurl);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -34,12 +68,14 @@ namespace cursoCoreMVC.Services
                     if (response.IsSuccessStatusCode)
                     {
                         var json_respuesta = await response.Content.ReadAsStringAsync();
-                        lista = JsonConvert.DeserializeObject<List<Productos>>(json_respuesta);
+                        var resultado = JsonConvert.DeserializeObject<ResultadoApi>(json_respuesta);
+                        lista = resultado.lista; 
                     }
+
+                    return lista;
                 }
                 catch (Exception ex)
                 {
-
                     Console.WriteLine($"Error: {ex.Message}");
                 }
             }
