@@ -1,21 +1,21 @@
-﻿@model List<>
+﻿@model List<User>
 @{
     ViewData["Title"] = "Home Page";
 }
 
-
 <html>
 <head>
-    <title>
-
-    </title>
+    <title></title>
 </head>
 <body>
     <form asp-controller="Home" asp-action="Login" method="post" style="margin-top: 50px;">
+        <h1>Login</h1>
+        <hr />
+        <br>    
         <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            <label for="exampleInputUser" class="form-label">User</label>
+            <input type="text" class="form-control" id="exampleInputUser" name="username" aria-describedby="userHelp">
+            <div id="userHelp" class="form-text">Enter your username.</div>
         </div>
         <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Password</label>
@@ -23,6 +23,5 @@
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-
 </body>
-</html>   
+</html>
