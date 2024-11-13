@@ -106,26 +106,26 @@ namespace cursoCore2.Controllers
 
 
         //// DELETE api/<ProductoController>/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            try
-            {
-                var productoEliminado = _repository.Remove(id); 
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    try
+        //    {
+        //        var productoEliminado = _repository.Remove(id); 
 
-                if (productoEliminado == null)
-                {
-                    return NotFound();
-                }
+        //        if (productoEliminado == null)
+        //        {
+        //            return NotFound();
+        //        }
 
-                return Ok(new { message = "El producto fue eliminado con éxito!", producto = productoEliminado });
+        //        return Ok(new { message = "El producto fue eliminado con éxito!", producto = productoEliminado });
 
-            }
-            catch (Exception ex)
-            {
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return BadRequest(ex.Message);
-            }
-        }
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
     }
 }

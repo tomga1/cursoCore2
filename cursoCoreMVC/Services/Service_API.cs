@@ -48,12 +48,17 @@ namespace cursoCoreMVC.Services
 
 
 
-
         public async Task<List<Productos>> Lista()
         {
             List<Productos> lista = new List<Productos>();
 
             await Authenticate();
+
+            if (string.IsNullOrEmpty(_token))
+            {
+                Console.WriteLine("No se pudo obtener el token de autenticación.");
+                return lista; // Retorna la lista vacía si no se obtuvo el token
+            }
 
             using (var client = new HttpClient())
             {
