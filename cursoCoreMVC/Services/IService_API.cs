@@ -9,7 +9,7 @@ namespace cursoCoreMVC.Services
         Task<bool> Guardar(Productos objeto);
         Task<bool> Editar(Productos objeto);
         Task<bool> Eliminar(int idProducto);
-
+        Task Authenticate(string username, string password);
 
 
     }

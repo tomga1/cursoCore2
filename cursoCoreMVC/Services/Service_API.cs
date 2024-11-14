@@ -1,7 +1,9 @@
 ﻿using cursoCoreMVC.Models;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.ObjectPool;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using System.Runtime.InteropServices.Marshalling;
 using System.Text; 
 
 namespace cursoCoreMVC.Services
@@ -9,8 +11,8 @@ namespace cursoCoreMVC.Services
     public class Service_API : IService_API
     {
         private static string? _baseurl; 
-        private static string? _username;
-        private static string? _password;
+        //private static string? _username;
+        //private static string? _password;
         private static string? _token;
 
         public Service_API()
@@ -18,18 +20,18 @@ namespace cursoCoreMVC.Services
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
 
             _baseurl = builder.GetSection("ApiSettings:baseUrl").Value;
-            _username = builder.GetSection("ApiSettings:Username").Value;
-            _password = builder.GetSection("ApiSettings:Password").Value;
+            //_username = builder.GetSection("ApiSettings:Username").Value;
+            //_password = builder.GetSection("ApiSettings:Password").Value;
 
 
         }
 
-        public async Task Authenticate()
+        public async Task Authenticate(string username, string password)
         {
             var cliente = new HttpClient();
             cliente.BaseAddress = new Uri(_baseurl);
 
-            var credenciales = new Credencial() { Username = _username, Password = _password };
+            var credenciales = new Credencial() { Username = username, Password = password };
             var content = new StringContent(JsonConvert.SerializeObject(credenciales), Encoding.UTF8, "application/json");
 
             var response = await cliente.PostAsync("api/Authenticate", content);
@@ -46,13 +48,14 @@ namespace cursoCoreMVC.Services
             }
         }
 
+        public static string? Token => _token;
+
+
 
 
         public async Task<List<Productos>> Lista()
         {
             List<Productos> lista = new List<Productos>();
-
-            await Authenticate();
 
             if (string.IsNullOrEmpty(_token))
             {
@@ -73,8 +76,9 @@ namespace cursoCoreMVC.Services
                     if (response.IsSuccessStatusCode)
                     {
                         var json_respuesta = await response.Content.ReadAsStringAsync();
-                        var resultado = JsonConvert.DeserializeObject<ResultadoApi>(json_respuesta);
-                        lista = resultado.lista; 
+
+                        // Deserializamos directamente a una lista de productos, no a ResultadoApi
+                        lista = JsonConvert.DeserializeObject<List<Productos>>(json_respuesta);
                     }
 
                     return lista;
@@ -84,8 +88,11 @@ namespace cursoCoreMVC.Services
                     Console.WriteLine($"Error: {ex.Message}");
                 }
             }
+
             return lista;
         }
+
+
 
         public Task<Productos> Obtener(int idProducto)
         {

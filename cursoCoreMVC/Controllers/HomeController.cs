@@ -4,6 +4,7 @@ using System.Diagnostics;
 
 using cursoCoreMVC.Services;
 using System.Security.Cryptography.Xml;
+using Microsoft.IdentityModel.Tokens;
 
 namespace cursoCoreMVC.Controllers
 {
@@ -16,10 +17,31 @@ namespace cursoCoreMVC.Controllers
             _serviceAPI = servicioAPI;
         }
 
-        public IActionResult Login()
+        public async Task<IActionResult> Login(string username, string password)
         {
-            return View();  
+            try
+            {
+                
+                await _serviceAPI.Authenticate(username, password);
+
+                if (string.IsNullOrEmpty(Service_API.Token))
+                {
+                    // Si el token no es válido, mostramos un mensaje de error
+                    //ViewBag.ErrorMessage = "Usuario o contraseña incorrectos.";
+                    return View();
+                }
+
+                // Si la autenticación es exitosa, redirigimos al Home
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex)
+            {
+                // Si ocurre algún error en el proceso de autenticación
+                ViewBag.ErrorMessage = $"Ocurrió un error: {ex.Message}";
+                return View();
+            }
         }
+
 
 
         public async Task<IActionResult> Index()
