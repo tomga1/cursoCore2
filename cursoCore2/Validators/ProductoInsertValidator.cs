@@ -7,7 +7,7 @@ namespace cursoCore2API.Validators
     {
         public ProductoInsertValidator() 
         {
-            RuleFor(x => x.nombre).NotEmpty(); 
+            RuleFor(x => x.nombre).NotEmpty().WithMessage("El nombre es obligatorio"); 
         }
     }
 }
