@@ -1,14 +1,13 @@
-﻿using cursoCore2.Data;
-using cursoCore2.Models;
+﻿using cursoCore2.Models;
 using cursoCore2API.Models;
 
 namespace cursoCore2API.Repositories
 {
     public class UserRepository
     {
-        private readonly AplicationDbContext _context;
+        private readonly StoreContext _context;
 
-        public UserRepository(AplicationDbContext context)
+        public UserRepository(StoreContext context)
         {
             _context = context;
         }

@@ -2,20 +2,28 @@ using cursoCore2;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Configuration;
-using cursoCore2.Data;
 using cursoCore2API.Repositories;
 using Microsoft.OpenApi.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Net.Http;
 using System.Text;
+using cursoCore2API.Models;
+using FluentValidation;
+using cursoCore2API.DTOs;
+using cursoCore2API.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+
 builder.Services.AddControllers();
 builder.Services.AddTransient<ProductoRepository>(); // <-- Aquí se registra el repositorio
 builder.Services.AddTransient<UserRepository>();   
+
+
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
@@ -61,9 +69,11 @@ builder.Services.AddAuthentication("Bearer")
 
 
 
-builder.Services.AddDbContext<AplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
+builder.Services.AddDbContext<StoreContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("StoreConnection")));
 
+//Validators
 
+builder.Services.AddScoped<IValidator<ProductoInsertDto>, ProductoInsertValidator>();
 
 var app = builder.Build();
 

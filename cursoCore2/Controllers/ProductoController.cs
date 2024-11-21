@@ -1,10 +1,13 @@
-﻿using cursoCore2.Data;
-using cursoCore2API.Repositories;
+﻿using cursoCore2API.Repositories;
 using cursoCore2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
+using cursoCore2API.Models;
+using Microsoft.AspNetCore.Identity;
+using cursoCore2API.DTOs;
+using FluentValidation;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -16,116 +19,229 @@ namespace cursoCore2.Controllers
     [Authorize]
     public class ProductoController : ControllerBase
     {
-        private readonly ProductoRepository _repository;
+        private StoreContext _context;
+        private IValidator<ProductoInsertDto> _productoInsertValidator;
 
-        public ProductoController(ProductoRepository repository)
+        public ProductoController(StoreContext context,
+            IValidator<ProductoInsertDto> productoInsertValidator)
         {
-            _repository = repository;
+            _context = context;
+            _productoInsertValidator = productoInsertValidator;
         }
 
         //private readonly AplicationDbContext _context;
-        
+
         //public ProductoController(AplicationDbContext context)
         //{
         //    _context = context; 
         //}
 
 
-        // GET: api/<ProductoController>
         [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            try
+        public async Task<IEnumerable<ProductoDto>> Get() =>
+            await _context.productos.Select(b => new ProductoDto
             {
-                var listaProductos = _repository.Get();
-                return Ok(listaProductos);
-            }
-            catch (Exception ex)
-            {
+                idProducto = b.idProducto,
+                nombre = b.nombre,
+                stock = b.stock,
+                descripcion = b.descripcion,
+                precio = b.precio,
+                imagen = b.imagen,
+            }).ToListAsync();
 
-                return BadRequest(ex.Message);
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProductoDto>> GetById(int id)
+        {
+            var producto = await _context.productos.FindAsync(id);
+
+            if (producto == null)
+            {
+                return NotFound();  
             }
+
+            var productoDto = new ProductoDto
+            {
+                idProducto = producto.idProducto,
+                nombre = producto.nombre,
+                stock = producto.stock,
+                descripcion = producto.descripcion,
+                precio = producto.precio,
+                imagen = producto.imagen
+
+            };
+            return Ok(productoDto);
         }
 
-        // GET api/<ProductoController>/5
-        [HttpGet("{titleForSearch}")]
-        public IActionResult Get(string titleForSearch)
-        {
-            return Ok(_repository.Get(titleForSearch));
-        }
-        
-
-        //POST api/<ProductoController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Producto producto)
+        public async Task<ActionResult<ProductoDto>> Add(ProductoInsertDto productoInsertDto)
         {
-            try
-            {
-                _repository.Add(producto);
-                return Ok(producto);
-            }
-            catch (Exception ex)
-            {
+            var validationResult = await _productoInsertValidator.ValidateAsync(productoInsertDto);  
 
-                return BadRequest(ex.Message);
+            if(!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
             }
+
+            var producto = new Producto()
+            {
+                nombre = productoInsertDto.nombre,
+                stock = productoInsertDto.stock,
+                descripcion = productoInsertDto.descripcion,
+                precio = productoInsertDto.precio,
+                imagen = productoInsertDto.imagen
+            };
+
+            await _context.productos.AddAsync(producto);
+            await _context.SaveChangesAsync();
+
+            var productoDto = new ProductoDto
+            {
+                idProducto = producto.idProducto,
+                nombre = producto.nombre,
+                stock = producto.stock,
+                descripcion = producto.descripcion,
+                precio = producto.precio,
+                imagen = producto.imagen 
+            };
+
+            return CreatedAtAction(nameof(GetById), new {id = producto.idProducto}, productoDto);
         }
 
-        // PUT api/<ProductoController>/5
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Producto producto)
+        public async Task<ActionResult<ProductoDto>> Update(int id, ProductoUpdateDto productoUpdateDto)
         {
-            try
+            var producto = await _context.productos.FindAsync(id);
+
+            if(producto == null)
             {
-                var productoExistente = _repository.Get(id);
-
-                if (productoExistente == null)
-                {
-                    return NotFound(new { message = "Producto no encontrado." });
-                }
-
-                productoExistente.nombre = producto.nombre;
-                productoExistente.descripcion = producto.descripcion;
-                productoExistente.stock = producto.stock;
-                productoExistente.precio = producto.precio;
-                productoExistente.imagen = producto.imagen;
-
-                await _repository.SaveChangesAsync();
-
-                return Ok(new { message = "El producto fue actualizado con éxito!" });
-
+                return NotFound();
             }
-            catch (Exception ex)
+
+            producto.nombre = productoUpdateDto.nombre;
+            producto.stock = productoUpdateDto.stock;
+            producto.descripcion = productoUpdateDto.descripcion;
+            producto.precio = productoUpdateDto.precio;
+            producto.imagen = productoUpdateDto.imagen;
+            producto.idMarca = producto.idMarca;
+
+            await _context.SaveChangesAsync();
+
+            var productoDto = new ProductoDto
             {
+                idProducto = producto.idProducto,
+                nombre = producto.nombre,
+                stock = producto.stock,
+                descripcion = producto.descripcion,
+                precio = producto.precio,
+                imagen = producto.imagen
+            };
 
-                return BadRequest(ex.Message);
+            return Ok(productoDto);
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var producto = await _context.productos.FindAsync(id);
+
+            if (producto == null)
+            {
+                return NotFound();
             }
+
+            _context.productos.Remove(producto);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
 
 
 
 
-        //// DELETE api/<ProductoController>/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    try
-        //    {
-        //        var productoEliminado = _repository.Remove(id); 
 
-        //        if (productoEliminado == null)
+
+        //    // GET api/<ProductoController>/5
+        //    [HttpGet("{titleForSearch}")]
+        //    public IActionResult Get(string titleForSearch)
+        //    {
+        //        return Ok(_repository.Get(titleForSearch));
+        //    }
+
+
+        //    //POST api/<ProductoController>
+        //    [HttpPost]
+        //    public async Task<IActionResult> Post([FromBody] Producto producto)
+        //    {
+        //        try
         //        {
-        //            return NotFound();
+        //            _repository.Add(producto);
+        //            return Ok(producto);
         //        }
+        //        catch (Exception ex)
+        //        {
 
-        //        return Ok(new { message = "El producto fue eliminado con éxito!", producto = productoEliminado });
-
+        //            return BadRequest(ex.Message);
+        //        }
         //    }
-        //    catch (Exception ex)
+
+        //    // PUT api/<ProductoController>/5
+        //    [HttpPut("{id}")]
+        //    public async Task<IActionResult> Put(int id, [FromBody] Producto producto)
         //    {
+        //        try
+        //        {
+        //            var productoExistente = _repository.Get(id);
 
-        //        return BadRequest(ex.Message);
+        //            if (productoExistente == null)
+        //            {
+        //                return NotFound(new { message = "Producto no encontrado." });
+        //            }
+
+        //            productoExistente.nombre = producto.nombre;
+        //            productoExistente.descripcion = producto.descripcion;
+        //            productoExistente.stock = producto.stock;
+        //            productoExistente.precio = producto.precio;
+        //            productoExistente.imagen = producto.imagen;
+
+        //            await _repository.SaveChangesAsync();
+
+        //            return Ok(new { message = "El producto fue actualizado con éxito!" });
+
+        //        }
+        //        catch (Exception ex)
+        //        {
+
+        //            return BadRequest(ex.Message);
+        //        }
         //    }
-        //}
+
+
+
+
+        //    // DELETE api/<ProductoController>/5
+        //    [HttpDelete("{id}")]
+        //    public async Task<IActionResult> Delete(int id)
+        //    {
+        //        try
+        //        {
+        //            var productoEliminado = _repository.Remove(id);
+
+        //            if (productoEliminado == null)
+        //            {
+        //                return NotFound();
+        //            }
+
+        //            return Ok(new { message = "El producto fue eliminado con éxito!", producto = productoEliminado });
+
+        //        }
+        //        catch (Exception ex)
+        //        {
+
+        //            return BadRequest(ex.Message);
+        //        }
+        //    }
     }
 }

@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using cursoCore2.Data;
+using cursoCore2API.Models;
 
 #nullable disable
 
-namespace cursoCore2.Migrations
+namespace cursoCore2API.Migrations
 {
-    [DbContext(typeof(AplicationDbContext))]
-    [Migration("20241113111852_ModificacionUsers")]
-    partial class ModificacionUsers
+    [DbContext(typeof(StoreContext))]
+    partial class StoreContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,11 +33,17 @@ namespace cursoCore2.Migrations
                     b.Property<string>("descripcion")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("idMarca")
+                        .HasColumnType("int");
+
                     b.Property<string>("imagen")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("nombre")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("obser2")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("precio")
@@ -51,7 +54,26 @@ namespace cursoCore2.Migrations
 
                     b.HasKey("idProducto");
 
+                    b.HasIndex("idMarca");
+
                     b.ToTable("productos");
+                });
+
+            modelBuilder.Entity("cursoCore2API.Models.Marcas", b =>
+                {
+                    b.Property<int>("idMarca")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("idMarca"));
+
+                    b.Property<string>("nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("idMarca");
+
+                    b.ToTable("marcas");
                 });
 
             modelBuilder.Entity("cursoCore2API.Models.User", b =>
@@ -73,7 +95,7 @@ namespace cursoCore2.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Fecha_Nacimiento")
+                    b.Property<DateTime?>("Fecha_Nacimiento")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nombre")
@@ -85,7 +107,6 @@ namespace cursoCore2.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UrlImagen")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
@@ -95,6 +116,17 @@ namespace cursoCore2.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("users");
+                });
+
+            modelBuilder.Entity("cursoCore2.Models.Producto", b =>
+                {
+                    b.HasOne("cursoCore2API.Models.Marcas", "Marcas")
+                        .WithMany()
+                        .HasForeignKey("idMarca")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Marcas");
                 });
 #pragma warning restore 612, 618
         }

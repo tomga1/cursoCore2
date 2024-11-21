@@ -1,13 +1,13 @@
-﻿using cursoCore2.Data;
-using cursoCore2.Models;
+﻿using cursoCore2.Models;
+using cursoCore2API.Models;
 using Microsoft.Identity.Client;
 namespace cursoCore2API.Repositories
 {
     public class ProductoRepository
     {
-        private readonly AplicationDbContext _context;
+        private readonly StoreContext _context;
 
-        public ProductoRepository(AplicationDbContext context)
+        public ProductoRepository(StoreContext context)
         {
             _context = context;
         }

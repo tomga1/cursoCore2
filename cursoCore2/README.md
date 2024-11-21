@@ -7,4 +7,13 @@ ACTUALIZAR BASE
 dotnet ef database update
 
 
-hola 
+
+
+////////////////////////////////////////////
+
+Instalacion de paquetes ENTITY FRAMEWORK
+
+**Microsoft.EntityFramworkCore.SqlServer
+**Microsoft.EntityFramworkCore.Tools
+
+///////////////////////////////////////////
