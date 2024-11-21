@@ -74,6 +74,8 @@ builder.Services.AddDbContext<StoreContext>(options => options.UseSqlServer(buil
 //Validators
 
 builder.Services.AddScoped<IValidator<ProductoInsertDto>, ProductoInsertValidator>();
+builder.Services.AddScoped<IValidator<ProductoUpdateDto>, ProductoUpdateValidator>();
+
 
 var app = builder.Build();
 

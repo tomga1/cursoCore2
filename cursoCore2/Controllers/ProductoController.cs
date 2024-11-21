@@ -21,12 +21,16 @@ namespace cursoCore2.Controllers
     {
         private StoreContext _context;
         private IValidator<ProductoInsertDto> _productoInsertValidator;
+        private IValidator<ProductoUpdateDto> _productoUpdateValidator;
+
 
         public ProductoController(StoreContext context,
-            IValidator<ProductoInsertDto> productoInsertValidator)
+            IValidator<ProductoInsertDto> productoInsertValidator,
+            IValidator<ProductoUpdateDto> productoUpdateValidator)
         {
             _context = context;
             _productoInsertValidator = productoInsertValidator;
+            _productoUpdateValidator = productoUpdateValidator; 
         }
 
         //private readonly AplicationDbContext _context;
@@ -112,9 +116,16 @@ namespace cursoCore2.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ProductoDto>> Update(int id, ProductoUpdateDto productoUpdateDto)
         {
+            var validationResult = await _productoUpdateValidator.ValidateAsync(productoUpdateDto);
+
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
+
             var producto = await _context.productos.FindAsync(id);
 
-            if(producto == null)
+            if (producto == null)
             {
                 return NotFound();
             }
