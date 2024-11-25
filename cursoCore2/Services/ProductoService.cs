@@ -1,34 +1,39 @@
 ﻿using cursoCore2.Models;
 using cursoCore2API.DTOs;
 using cursoCore2API.Models;
+using cursoCore2API.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace cursoCore2API.Services
 {
     public class ProductoService : ICommonService<ProductoDto, ProductoInsertDto, ProductoUpdateDto>
     {
-        private StoreContext _context; 
+        private IRepository<Producto> _productoRepository;
 
-        public ProductoService(StoreContext context)
+        public ProductoService(IRepository<Producto> productoRepository)
         {
-            _context = context;
+            _productoRepository = productoRepository;   
         }
 
 
-        public async Task<IEnumerable<ProductoDto>> Get() =>
-            await _context.productos.Select(b => new ProductoDto
+        public async Task<IEnumerable<ProductoDto>> Get()
+        {
+            var productos = await _productoRepository.Get();
+
+            return productos.Select(p => new ProductoDto()
             {
-                idProducto = b.idProducto,
-                nombre = b.nombre,
-                stock = b.stock,
-                descripcion = b.descripcion,
-                precio = b.precio,
-                imagen = b.imagen,
-            }).ToListAsync();
+                idProducto = p.idProducto,
+                nombre = p.nombre,
+                stock = p.stock,
+                descripcion = p.descripcion,
+                precio = p.precio,
+                imagen = p.imagen,
+            });
+        }
 
         public async Task<ProductoDto> GetById(int id)
         {
-            var producto = await _context.productos.FindAsync(id);  
+            var producto = await _productoRepository.GetById(id);  
 
             if(producto != null)
             {
@@ -60,8 +65,8 @@ namespace cursoCore2API.Services
                 idMarca = productoInsertDto.idMarca
             };
 
-            await _context.productos.AddAsync(producto);
-            await _context.SaveChangesAsync();
+            await _productoRepository.Add(producto);
+            await _productoRepository.Save();
 
             var productoDto = new ProductoDto
             {
@@ -80,7 +85,7 @@ namespace cursoCore2API.Services
 
         public async Task<ProductoDto> Update(int id, ProductoUpdateDto productoUpdateDto)
         {
-            var producto = await _context.productos.FindAsync(id);
+            var producto = await _productoRepository.GetById(id);
 
             if (producto != null)
             {
@@ -90,7 +95,9 @@ namespace cursoCore2API.Services
                 producto.precio = productoUpdateDto.precio;
                 producto.imagen = productoUpdateDto.imagen;
 
-                await _context.SaveChangesAsync();
+                _productoRepository.Update(producto);
+                await _productoRepository.Save();   
+
 
                 var productoDto = new ProductoDto
                 {
@@ -114,7 +121,8 @@ namespace cursoCore2API.Services
 
         public async Task<ProductoDto> Delete(int id)
         {
-            var producto = await _context.productos.FindAsync(id);
+            var producto = await _productoRepository.GetById(id); 
+
 
             if (producto != null)
             {
@@ -128,9 +136,9 @@ namespace cursoCore2API.Services
                     imagen = producto.imagen
                 };
 
-                _context.productos.Remove(producto);
+                _productoRepository.Delete(producto);
 
-                await _context.SaveChangesAsync();
+                await _productoRepository.Save();
 
                 
 

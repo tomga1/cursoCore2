@@ -1,5 +1,4 @@
-﻿using cursoCore2API.Repositories;
-using cursoCore2.Models;
+﻿using cursoCore2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;

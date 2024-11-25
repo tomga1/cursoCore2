@@ -1,5 +1,5 @@
 ﻿using cursoCore2API.Models;
-using cursoCore2API.Repositories;
+//using cursoCore2API.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -15,10 +15,10 @@ namespace cursoCore2API.Controllers
     public class AuthenticateController : ControllerBase
     {
 
-        private readonly UserRepository _userRepository;
+        //private readonly UserRepository _userRepository;
         private readonly IConfiguration _config;
 
-        public AuthenticateController(UserRepository userRepository, IConfiguration config)
+        //public AuthenticateController(UserRepository userRepository, IConfiguration config)
         {
             _userRepository = userRepository;
             _config = config;
