@@ -2,7 +2,6 @@ using cursoCore2;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Configuration;
-using cursoCore2API.Repositories;
 using Microsoft.OpenApi.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Net.Http;
@@ -11,6 +10,10 @@ using cursoCore2API.Models;
 using FluentValidation;
 using cursoCore2API.DTOs;
 using cursoCore2API.Validators;
+using cursoCore2API.Services;
+using Microsoft.Extensions.DependencyInjection;
+using cursoCore2API.Repository;
+using cursoCore2.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,11 +21,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
-builder.Services.AddTransient<ProductoRepository>(); // <-- Aquí se registra el repositorio
-builder.Services.AddTransient<UserRepository>();   
+//builder.Services.AddTransient<UserRepository>();
+builder.Services.AddKeyedScoped<ICommonService<ProductoDto, ProductoInsertDto, ProductoUpdateDto>, ProductoService>("productoService");
 
 
-
+builder.Services.AddScoped<IRepository<Producto>, ProductoRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
