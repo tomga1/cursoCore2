@@ -1,4 +1,5 @@
-﻿using cursoCore2.Models;
+﻿using AutoMapper;
+using cursoCore2.Models;
 using cursoCore2API.DTOs;
 using cursoCore2API.Models;
 using cursoCore2API.Repository;
@@ -9,10 +10,13 @@ namespace cursoCore2API.Services
     public class ProductoService : ICommonService<ProductoDto, ProductoInsertDto, ProductoUpdateDto>
     {
         private IRepository<Producto> _productoRepository;
+        private IMapper _mapper;
 
-        public ProductoService(IRepository<Producto> productoRepository)
+        public ProductoService(IRepository<Producto> productoRepository,
+            IMapper mapper)
         {
             _productoRepository = productoRepository;   
+            _mapper = mapper;   
         }
 
 
@@ -20,15 +24,7 @@ namespace cursoCore2API.Services
         {
             var productos = await _productoRepository.Get();
 
-            return productos.Select(p => new ProductoDto()
-            {
-                idProducto = p.idProducto,
-                nombre = p.nombre,
-                stock = p.stock,
-                descripcion = p.descripcion,
-                precio = p.precio,
-                imagen = p.imagen,
-            });
+            return productos.Select(p => _mapper.Map<ProductoDto>(p));
         }
 
         public async Task<ProductoDto> GetById(int id)
@@ -37,15 +33,7 @@ namespace cursoCore2API.Services
 
             if(producto != null)
             {
-                var productoDto = new ProductoDto
-                {
-                    idProducto = producto.idProducto,
-                    nombre = producto.nombre,
-                    stock = producto.stock,
-                    descripcion = producto.descripcion,
-                    precio = producto.precio,
-                    imagen = producto.imagen,
-                };
+                var productoDto = _mapper.Map<ProductoDto>(producto);
 
                 return productoDto;
             }
@@ -55,28 +43,12 @@ namespace cursoCore2API.Services
 
         public async Task<ProductoDto> Add(ProductoInsertDto productoInsertDto)
         {
-            var producto = new Producto()
-            {
-                nombre = productoInsertDto.nombre,
-                stock = productoInsertDto.stock,
-                descripcion = productoInsertDto.descripcion,
-                precio = productoInsertDto.precio,
-                imagen = productoInsertDto.imagen,
-                idMarca = productoInsertDto.idMarca
-            };
+            var producto = _mapper.Map<Producto>(productoInsertDto);
 
             await _productoRepository.Add(producto);
             await _productoRepository.Save();
 
-            var productoDto = new ProductoDto
-            {
-                idProducto = producto.idProducto,
-                nombre = producto.nombre,
-                stock = producto.stock,
-                descripcion = producto.descripcion,
-                precio = producto.precio,
-                imagen = producto.imagen,
-            };
+            var productoDto = _mapper.Map<ProductoDto>(producto);
 
             return productoDto;
         }

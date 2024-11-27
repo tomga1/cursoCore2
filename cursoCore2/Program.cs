@@ -14,6 +14,7 @@ using cursoCore2API.Services;
 using Microsoft.Extensions.DependencyInjection;
 using cursoCore2API.Repository;
 using cursoCore2.Models;
+using cursoCore2API.AutoMappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,6 +80,9 @@ builder.Services.AddDbContext<StoreContext>(options => options.UseSqlServer(buil
 builder.Services.AddScoped<IValidator<ProductoInsertDto>, ProductoInsertValidator>();
 builder.Services.AddScoped<IValidator<ProductoUpdateDto>, ProductoUpdateValidator>();
 
+
+//Mappers
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 
