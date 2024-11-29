@@ -17,6 +17,11 @@ namespace cursoCoreMVC.Controllers
             _serviceAPI = servicioAPI;
         }
 
+        public IActionResult Listado()
+        {
+            return View();  
+        }
+
         public async Task<IActionResult> Login(string username, string password)
         {
             try

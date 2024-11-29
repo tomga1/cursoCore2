@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IService_API, Service_API>();
+builder.Services.AddScoped<IproductoService, ProductoService>();    
 
  
 var app = builder.Build();
@@ -23,7 +24,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-//app.UseAuthorization();
+app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",
