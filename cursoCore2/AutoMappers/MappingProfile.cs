@@ -12,6 +12,8 @@ namespace cursoCore2API.AutoMappers
                                 .ForMember(dest => dest.idProducto, opt => opt.Ignore()); // Ignorar idProducto ya que es autogenerado
 
             CreateMap<Producto, ProductoDto>();
+
+            CreateMap<ProductoUpdateDto, Producto>();
         }
     }
 }

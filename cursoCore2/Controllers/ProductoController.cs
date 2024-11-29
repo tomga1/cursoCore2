@@ -58,6 +58,12 @@ namespace cursoCore2.Controllers
                 return BadRequest(validationResult.Errors);
             }
 
+            if (!_productoService.Validate(productoInsertDto))
+            {
+                return BadRequest(_productoService.Errors); 
+            }
+
+
             var productoDto = await _productoService.Add(productoInsertDto);
 
             return CreatedAtAction(nameof(GetById), new {id = productoDto.idProducto}, productoDto);
@@ -72,6 +78,10 @@ namespace cursoCore2.Controllers
             if (!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors);
+            }
+            if (!_productoService.Validate(productoUpdateDto))
+            {
+                return BadRequest(_productoService.Errors);
             }
 
             var productoDto = await _productoService.Update(id, productoUpdateDto);
@@ -88,10 +98,6 @@ namespace cursoCore2.Controllers
 
             return productoDto == null ? NotFound() : Ok(productoDto); 
         }
-
-
-
-
 
 
     }

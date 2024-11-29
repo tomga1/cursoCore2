@@ -11,6 +11,8 @@ namespace cursoCore2API.Services
     {
         private IRepository<Producto> _productoRepository;
         private IMapper _mapper;
+        public List<string> Errors { get; }
+
 
         public ProductoService(IRepository<Producto> productoRepository,
             IMapper mapper)
@@ -61,25 +63,13 @@ namespace cursoCore2API.Services
 
             if (producto != null)
             {
-                producto.nombre = productoUpdateDto.nombre;
-                producto.stock = productoUpdateDto.stock;
-                producto.descripcion = productoUpdateDto.descripcion;
-                producto.precio = productoUpdateDto.precio;
-                producto.imagen = productoUpdateDto.imagen;
+                producto = _mapper.Map<ProductoUpdateDto, Producto>(productoUpdateDto,producto);    
 
                 _productoRepository.Update(producto);
                 await _productoRepository.Save();   
 
 
-                var productoDto = new ProductoDto
-                {
-                    idProducto = producto.idProducto,
-                    nombre = producto.nombre,
-                    stock = producto.stock,
-                    descripcion = producto.descripcion,
-                    precio = producto.precio,
-                    imagen = producto.imagen
-                };
+                var productoDto = _mapper.Map<ProductoDto>(producto);
 
                 return productoDto;
             }
@@ -98,15 +88,7 @@ namespace cursoCore2API.Services
 
             if (producto != null)
             {
-                var productoDto = new ProductoDto
-                {
-                    idProducto = producto.idProducto,
-                    nombre = producto.nombre,
-                    stock = producto.stock,
-                    descripcion = producto.descripcion,
-                    precio = producto.precio,
-                    imagen = producto.imagen
-                };
+                var productoDto = _mapper.Map<ProductoDto>(producto); 
 
                 _productoRepository.Delete(producto);
 
@@ -120,6 +102,29 @@ namespace cursoCore2API.Services
             return null;
 
         }
+
+        public bool Validate(ProductoInsertDto productoInsertDto)
+        {
+            if (_productoRepository.Search(b => b.nombre == productoInsertDto.nombre).Count() > 0)
+            {
+                Errors.Add("No puede existir un producto con un nombre ya existente");
+                return false; 
+                
+            }
+            return true; 
+        }
+
+        public bool Validate(ProductoUpdateDto productoUpdateDto)
+        {
+            if (_productoRepository.Search(b => b.nombre == productoUpdateDto.nombre && productoUpdateDto.idProducto != b.idProducto).Count() > 0)
+            {
+                Errors.Add("No puede existir un producto con un nombre ya existente");
+                return false;
+
+            }
+            return true;
+        }
+       
 
         
 

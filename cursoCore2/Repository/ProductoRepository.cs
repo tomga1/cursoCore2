@@ -35,5 +35,8 @@ namespace cursoCore2API.Repository
 
         public async Task Save()
             => await _context.SaveChangesAsync();
+
+        public IEnumerable<Producto> Search(Func<Producto, bool> filter) =>
+            _context.productos.Where(filter).ToList();
     }
 }

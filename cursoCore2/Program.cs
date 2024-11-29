@@ -22,7 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
-//builder.Services.AddTransient<UserRepository>();
+builder.Services.AddTransient<UserRepository>();
 builder.Services.AddKeyedScoped<ICommonService<ProductoDto, ProductoInsertDto, ProductoUpdateDto>, ProductoService>("productoService");
 
 
