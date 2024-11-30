@@ -6,8 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IService_API, Service_API>();
-builder.Services.AddScoped<IproductoService, ProductoService>();    
-
+builder.Services.AddScoped<IproductoService, ProductoService>();
+builder.Services.AddHttpClient<IproductoService, ProductoService>();
  
 var app = builder.Build();
 
