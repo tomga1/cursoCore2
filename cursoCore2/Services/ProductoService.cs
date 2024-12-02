@@ -2,7 +2,7 @@
 using cursoCore2.Models;
 using cursoCore2API.DTOs;
 using cursoCore2API.Models;
-using cursoCore2API.Repository;
+using cursoCore2API.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 
 namespace cursoCore2API.Services

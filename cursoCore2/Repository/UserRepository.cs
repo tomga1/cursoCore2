@@ -1,4 +1,5 @@
-﻿using cursoCore2API.Models;
+﻿using cursoCore2API.Data;
+using cursoCore2API.Models;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace cursoCore2API.Repository

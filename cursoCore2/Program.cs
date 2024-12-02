@@ -6,7 +6,6 @@ using Microsoft.OpenApi.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Net.Http;
 using System.Text;
-using cursoCore2API.Models;
 using FluentValidation;
 using cursoCore2API.DTOs;
 using cursoCore2API.Validators;
@@ -15,8 +14,13 @@ using Microsoft.Extensions.DependencyInjection;
 using cursoCore2API.Repository;
 using cursoCore2.Models;
 using cursoCore2API.AutoMappers;
+using cursoCore2API.Repository.IRepository;
+using cursoCore2API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddDbContext<StoreContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("StoreConnection")));
 
 // Add services to the container.
 
@@ -72,9 +76,7 @@ builder.Services.AddAuthentication("Bearer")
     );
 
 
-
-builder.Services.AddDbContext<StoreContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("StoreConnection")));
-
+ 
 //Validators
 
 builder.Services.AddScoped<IValidator<ProductoInsertDto>, ProductoInsertValidator>();

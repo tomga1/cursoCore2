@@ -1,5 +1,6 @@
 ﻿using cursoCore2.Models;
-using cursoCore2API.Models;
+using cursoCore2API.Data;
+using cursoCore2API.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 
 namespace cursoCore2API.Repository
