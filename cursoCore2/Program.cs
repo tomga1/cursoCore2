@@ -16,6 +16,7 @@ using cursoCore2.Models;
 using cursoCore2API.AutoMappers;
 using cursoCore2API.Repository.IRepository;
 using cursoCore2API.Data;
+using cursoCore2API.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,9 @@ builder.Services.AddKeyedScoped<ICommonService<ProductoDto, ProductoInsertDto, P
 
 
 builder.Services.AddScoped<IRepository<Producto>, ProductoRepository>();
+builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

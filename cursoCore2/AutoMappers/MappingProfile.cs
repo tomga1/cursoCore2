@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using cursoCore2.Models;
 using cursoCore2API.DTOs;
+using cursoCore2API.Models;
 
 namespace cursoCore2API.AutoMappers
 {
@@ -14,6 +15,9 @@ namespace cursoCore2API.AutoMappers
             CreateMap<Producto, ProductoDto>();
 
             CreateMap<ProductoUpdateDto, Producto>();
+
+            CreateMap<Categoria, CategoriaDto>().ReverseMap();
+            CreateMap<Categoria, CategoriaInsertDto>().ReverseMap();    
         }
     }
 }
