@@ -24,6 +24,17 @@ namespace cursoCore2API.Repository
         public bool ActualizarCategoria(Categoria categoria)
         {
             categoria.FechaCreacion = DateTime.Now;
+            var categoriaExistente = _context.categoria.Find(categoria.Id);
+
+            if(categoriaExistente  != null)
+            {
+                _context.Entry(categoriaExistente).CurrentValues.SetValues(categoria);
+
+            }
+            else
+            {
+                _context.categoria.Update(categoria);
+            }
             _context.categoria.Update(categoria);
             return Guardar();    
         }

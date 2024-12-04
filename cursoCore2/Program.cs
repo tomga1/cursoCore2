@@ -17,6 +17,7 @@ using cursoCore2API.AutoMappers;
 using cursoCore2API.Repository.IRepository;
 using cursoCore2API.Data;
 using cursoCore2API.Models;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -89,6 +90,7 @@ builder.Services.AddScoped<IValidator<ProductoUpdateDto>, ProductoUpdateValidato
 
 //Mappers
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 
 var app = builder.Build();
 
