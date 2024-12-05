@@ -28,5 +28,10 @@ namespace cursoCore2.Models
 
         [ForeignKey("idMarca")]
         public virtual Marcas? Marcas { get; set; }
+
+        public int categoriaId { get; set; }
+        [ForeignKey("categoriaId")]
+        public Categoria Categoria { get; set; }
+
     }
 }

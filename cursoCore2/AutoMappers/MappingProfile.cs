@@ -9,12 +9,17 @@ namespace cursoCore2API.AutoMappers
     {
         public MappingProfile()
         {
-            CreateMap<ProductoInsertDto, Producto>()
-                                .ForMember(dest => dest.idProducto, opt => opt.Ignore()); // Ignorar idProducto ya que es autogenerado
+            //CreateMap<ProductoInsertDto, Producto>()
+            //                    .ForMember(dest => dest.idProducto, opt => opt.Ignore()); // Ignorar idProducto ya que es autogenerado
 
-            CreateMap<Producto, ProductoDto>();
+            //CreateMap<Producto, ProductoDto>();
 
-            CreateMap<ProductoUpdateDto, Producto>();
+            //CreateMap<ProductoUpdateDto, Producto>();
+
+            CreateMap<Producto, ProductoDto>().ReverseMap();
+            CreateMap<Producto, ProductoInsertDto>().ReverseMap();
+            CreateMap<Producto, ProductoUpdateDto>().ReverseMap();
+
 
             CreateMap<Categoria, CategoriaDto>().ReverseMap();
             CreateMap<Categoria, CategoriaInsertDto>().ReverseMap();    
