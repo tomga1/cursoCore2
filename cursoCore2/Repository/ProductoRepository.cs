@@ -39,5 +39,14 @@ namespace cursoCore2API.Repository
 
         public IEnumerable<Producto> Search(Func<Producto, bool> filter) =>
             _context.productos.Where(filter).ToList();
+
+        ICollection<Producto> GetProductoEnCategoria(int catId)
+        {
+
+        }
+        IEnumerable<Producto> BuscarProducto(string nombre)
+        {
+
+        }
     }
 }
