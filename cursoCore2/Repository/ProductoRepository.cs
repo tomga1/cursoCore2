@@ -1,52 +1,76 @@
-﻿using cursoCore2.Models;
-using cursoCore2API.Data;
+﻿using cursoCore2API.Data;
+using cursoCore2API.Models;
 using cursoCore2API.Repository.IRepository;
-using Microsoft.EntityFrameworkCore;
 
 namespace cursoCore2API.Repository
 {
-    public class ProductoRepository : IRepository<Producto>
+    public class ProductoRepository : ICategoriaRepository
     {
-        private StoreContext _context; 
+        private readonly StoreContext _context;
 
         public ProductoRepository(StoreContext context)
         {
-            _context = context; 
+            _context = context;
         }
 
 
-        public async Task<IEnumerable<Producto>> Get()
-            => await _context.productos.ToListAsync();
 
-        public async Task<Producto> GetById(int id)
-            => await _context.productos.FindAsync(id);
-
-        public async Task Add(Producto producto)
-            => await _context.productos.AddAsync(producto);
-
-        public void Update(Producto producto)
+        public bool CrearCategoria(Categoria categoria)
         {
-            _context.productos.Attach(producto);
-            _context.productos.Entry(producto).State = EntityState.Modified;
+            categoria.FechaCreacion = DateTime.Now;
+            _context.categoria.Add(categoria);
+            return Guardar();
+        }
+        public bool ActualizarCategoria(Categoria categoria)
+        {
+            categoria.FechaCreacion = DateTime.Now;
+            var categoriaExistente = _context.categoria.Find(categoria.Id);
+
+            if (categoriaExistente != null)
+            {
+                _context.Entry(categoriaExistente).CurrentValues.SetValues(categoria);
+
+            }
+            else
+            {
+                _context.categoria.Update(categoria);
+            }
+            _context.categoria.Update(categoria);
+            return Guardar();
         }
 
 
-        public async void Delete(Producto producto)
-            => _context.productos.Remove(producto);
-
-        public async Task Save()
-            => await _context.SaveChangesAsync();
-
-        public IEnumerable<Producto> Search(Func<Producto, bool> filter) =>
-            _context.productos.Where(filter).ToList();
-
-        ICollection<Producto> GetProductoEnCategoria(int catId)
+        public bool BorrarCategoria(Categoria categoria)
         {
-
+            _context.categoria.Remove(categoria);
+            return Guardar();
         }
-        IEnumerable<Producto> BuscarProducto(string nombre)
-        {
 
+        public bool ExisteCategoria(int id)
+        {
+            return _context.categoria.Any(c => c.Id == id);
+        }
+
+        public bool ExisteCategoria(string nombre)
+        {
+            bool valor = _context.categoria.Any(c => c.Nombre.ToLower().Trim() == nombre.ToLower().Trim());
+            return valor;
+        }
+
+        public Categoria GetCategoria(int categoriaId)
+        {
+            return _context.categoria.FirstOrDefault(c => c.Id == categoriaId);
+        }
+
+
+        public ICollection<Categoria> GetCategorias()
+        {
+            return _context.categoria.OrderBy(c => c.Nombre).ToList();
+        }
+
+        public bool Guardar()
+        {
+            return _context.SaveChanges() >= 0 ? true : false;
         }
     }
 }
