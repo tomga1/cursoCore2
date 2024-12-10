@@ -3,19 +3,19 @@ using cursoCore2API.Models;
 
 namespace cursoCore2API.Repository.IRepository
 {
-    public interface ICategoriaRepository
+    public interface IproductoRepository
     {
-        ICollection<Producto> GetCategorias();
+        ICollection<Producto> GetProductos();
         ICollection<Producto> GetProductosEnCategoria(int catId);
-        IEnumerable<Producto> BuscarPeliculas(string nombre);
+        IEnumerable<Producto> BuscarProducto(string nombre);
 
-        Producto GetCategoria(int productoId);
-        bool ExisteCategoria(int id);
-        bool ExisteCategoria(string nombre);
+        Producto GetProducto(int productoId);
+        bool ExisteProducto(int id);
+        bool ExisteProducto(string nombre);
 
-        bool CrearCategoria(Producto producto);
-        bool ActualizarCategoria(Producto producto);
-        bool BorrarCategoria(Producto producto);
+        bool CrearProducto(Producto producto);
+        bool ActualizarProducto(Producto producto);
+        bool BorrarProducto(Producto producto);
 
         bool Guardar();
     }

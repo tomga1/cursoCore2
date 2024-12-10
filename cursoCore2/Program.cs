@@ -29,11 +29,13 @@ builder.Services.AddDbContext<StoreContext>(options => options.UseSqlServer(buil
 
 builder.Services.AddControllers();
 builder.Services.AddTransient<UserRepository>();
-builder.Services.AddKeyedScoped<ICommonService<ProductoDto, ProductoInsertDto, ProductoUpdateDto>, ProductoService>("productoService");
+//builder.Services.AddKeyedScoped<ICommonService<ProductoDto, ProductoInsertDto, ProductoUpdateDto>, ProductoService>("productoService");
 
 
-builder.Services.AddScoped<IRepository<Producto>, ProductoRepository>();
+//builder.Services.AddScoped<IRepository<Producto>, ProductoRepository>();
+builder.Services.AddScoped<IproductoRepository, ProductoRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+
 
 
 
@@ -82,10 +84,10 @@ builder.Services.AddAuthentication("Bearer")
 
 
  
-//Validators
+////Validators
 
-builder.Services.AddScoped<IValidator<ProductoInsertDto>, ProductoInsertValidator>();
-builder.Services.AddScoped<IValidator<ProductoUpdateDto>, ProductoUpdateValidator>();
+//builder.Services.AddScoped<IValidator<ProductoInsertDto>, ProductoInsertValidator>();
+//builder.Services.AddScoped<IValidator<ProductoUpdateDto>, ProductoUpdateValidator>();
 
 
 //Mappers

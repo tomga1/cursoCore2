@@ -1,76 +1,83 @@
-﻿using cursoCore2API.Data;
+﻿using cursoCore2.Models;
+using cursoCore2API.Data;
 using cursoCore2API.Models;
 using cursoCore2API.Repository.IRepository;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace cursoCore2API.Repository
 {
-    public class ProductoRepository : ICategoriaRepository
+    public class ProductoRepository : IproductoRepository
     {
         private readonly StoreContext _context;
 
         public ProductoRepository(StoreContext context)
         {
-            _context = context;
+            _context = context; 
         }
 
-
-
-        public bool CrearCategoria(Categoria categoria)
+        public bool ActualizarProducto(Producto producto)
         {
-            categoria.FechaCreacion = DateTime.Now;
-            _context.categoria.Add(categoria);
-            return Guardar();
-        }
-        public bool ActualizarCategoria(Categoria categoria)
-        {
-            categoria.FechaCreacion = DateTime.Now;
-            var categoriaExistente = _context.categoria.Find(categoria.Id);
-
-            if (categoriaExistente != null)
-            {
-                _context.Entry(categoriaExistente).CurrentValues.SetValues(categoria);
-
-            }
-            else
-            {
-                _context.categoria.Update(categoria);
-            }
-            _context.categoria.Update(categoria);
+            
+            _context.productos.Update(producto);
+            
             return Guardar();
         }
 
-
-        public bool BorrarCategoria(Categoria categoria)
+        public bool CrearProducto(Producto producto)
         {
-            _context.categoria.Remove(categoria);
+            _context.productos.Add(producto);
+            return Guardar();
+        }
+        
+
+
+        public bool BorrarProducto(Producto producto)
+        {
+            _context.productos.Remove(producto);
             return Guardar();
         }
 
-        public bool ExisteCategoria(int id)
+        public bool ExisteProducto(int id)
         {
-            return _context.categoria.Any(c => c.Id == id);
+            return _context.productos.Any(c => c.idProducto == id); 
         }
 
-        public bool ExisteCategoria(string nombre)
+        public bool ExisteProducto(string nombre)
         {
-            bool valor = _context.categoria.Any(c => c.Nombre.ToLower().Trim() == nombre.ToLower().Trim());
-            return valor;
+            bool valor = _context.productos.Any(c => c.nombre.ToLower().Trim() == nombre.ToLower().Trim());
+            return valor;   
         }
 
-        public Categoria GetCategoria(int categoriaId)
+        public Producto GetProducto(int productoId)
         {
-            return _context.categoria.FirstOrDefault(c => c.Id == categoriaId);
+            return _context.productos.FirstOrDefault(c => c.idProducto == productoId);
         }
 
 
-        public ICollection<Categoria> GetCategorias()
+        public ICollection<Producto> GetProductos()
         {
-            return _context.categoria.OrderBy(c => c.Nombre).ToList();
+            return _context.productos.OrderBy(c => c.nombre).ToList();  
         }
 
         public bool Guardar()
         {
-            return _context.SaveChanges() >= 0 ? true : false;
+            return _context.SaveChanges() >= 0 ? true : false;  
+        }
+
+        public ICollection<Producto> GetProductosEnCategoria(int catId)
+        {
+            return _context.productos.Include(pro => pro.Categoria).Where(pro => pro.categoriaId == catId).ToList();   
+        }
+
+        public IEnumerable<Producto> BuscarProducto(string nombre)
+        {
+            IQueryable<Producto> query = _context.productos;
+            if (!string.IsNullOrEmpty(nombre))
+            {
+                query = query.Where(e => e.nombre.Contains(nombre) || e.descripcion.Contains(nombre));
+            }
+            return query.ToList();
         }
     }
 }
