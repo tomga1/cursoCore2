@@ -1,4 +1,4 @@
-using cursoCore2;
+using cursoCore2API;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Configuration;
@@ -12,11 +12,10 @@ using cursoCore2API.Validators;
 using cursoCore2API.Services;
 using Microsoft.Extensions.DependencyInjection;
 using cursoCore2API.Repository;
-using cursoCore2.Models;
+using cursoCore2API.Models;
 using cursoCore2API.AutoMappers;
 using cursoCore2API.Repository.IRepository;
 using cursoCore2API.Data;
-using cursoCore2API.Models;
 using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);

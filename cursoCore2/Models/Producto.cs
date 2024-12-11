@@ -1,21 +1,20 @@
 ﻿using Azure.Identity;
-using cursoCore2API.Models;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace cursoCore2.Models
+namespace cursoCore2API.Models
 {
     public class Producto
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]   
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int idProducto { get; set; }
 
         [Required]
         public string? nombre { get; set; }
 
-        [Required]  
+        [Required]
         public int stock { get; set; }
         public string? descripcion { get; set; }
 
@@ -24,7 +23,7 @@ namespace cursoCore2.Models
 
         public string? imagen { get; set; }
 
-        public int idMarca { get; set; }    
+        public int idMarca { get; set; }
 
         [ForeignKey("idMarca")]
         public virtual Marcas? Marcas { get; set; }

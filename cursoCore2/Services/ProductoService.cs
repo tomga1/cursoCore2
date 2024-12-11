@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using cursoCore2.Models;
 using cursoCore2API.DTOs;
 using cursoCore2API.Models;
 using cursoCore2API.Repository.IRepository;

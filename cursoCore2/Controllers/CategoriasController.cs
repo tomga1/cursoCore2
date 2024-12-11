@@ -74,10 +74,7 @@ namespace cursoCore2API.Controllers
             {
                 return BadRequest(ModelState); 
             }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            
 
             if (_repository.ExisteCategoria(crearCategoriaDto.Nombre))
             {
@@ -92,7 +89,7 @@ namespace cursoCore2API.Controllers
                 ModelState.AddModelError("", $"Algo salió mal guardando el registro {categoria.Nombre}");
                 return StatusCode(404, ModelState);
             }
-            return CreatedAtRoute("GetCategoria", new { categoriaId = categoria.Id }, categoria);
+            return CreatedAtRoute("GetCategoria", new { categoriaId = categoria.categoriaId }, categoria);
         }
 
         [HttpPatch("{categoriaId:int}", Name = "GetCategoria")]
@@ -108,7 +105,7 @@ namespace cursoCore2API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (CategoriaDto == null || categoriaId != CategoriaDto.Id)
+            if (CategoriaDto == null || categoriaId != CategoriaDto.categoriaId)
             {
                 return BadRequest(ModelState);
             }
@@ -146,7 +143,7 @@ namespace cursoCore2API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (CategoriaDto == null || categoriaId != CategoriaDto.Id)
+            if (CategoriaDto == null || categoriaId != CategoriaDto.categoriaId)
             {
                 return BadRequest(ModelState);
             }

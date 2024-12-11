@@ -1,7 +1,7 @@
 # cursoCore2
 
 COMANDO PARA AGREGAR MIGRATION
-dotnet ef migrations add "Modelo categoria Agregado"
+dotnet ef migrations add "Modelo categoria modificado categoriaId"
 
 ACTUALIZAR BASE
 dotnet ef database update

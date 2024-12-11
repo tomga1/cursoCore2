@@ -1,5 +1,4 @@
-﻿using cursoCore2.Models;
-using cursoCore2API.Models;
+﻿using cursoCore2API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace cursoCore2API.Data

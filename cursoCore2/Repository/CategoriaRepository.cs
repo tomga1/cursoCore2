@@ -24,7 +24,7 @@ namespace cursoCore2API.Repository
         public bool ActualizarCategoria(Categoria categoria)
         {
             categoria.FechaCreacion = DateTime.Now;
-            var categoriaExistente = _context.categoria.Find(categoria.Id);
+            var categoriaExistente = _context.categoria.Find(categoria.categoriaId);
 
             if(categoriaExistente  != null)
             {
@@ -48,7 +48,7 @@ namespace cursoCore2API.Repository
 
         public bool ExisteCategoria(int id)
         {
-            return _context.categoria.Any(c => c.Id == id); 
+            return _context.categoria.Any(c => c.categoriaId == id); 
         }
 
         public bool ExisteCategoria(string nombre)
@@ -59,7 +59,7 @@ namespace cursoCore2API.Repository
 
         public Categoria GetCategoria(int categoriaId)
         {
-            return _context.categoria.FirstOrDefault(c => c.Id == categoriaId);
+            return _context.categoria.FirstOrDefault(c => c.categoriaId == categoriaId);
         }
 
 
