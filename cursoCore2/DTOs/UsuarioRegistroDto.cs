@@ -13,8 +13,6 @@ namespace cursoCore2API.DTOs
         [Required]
         public string Email { get; set; } = string.Empty;
         public string Nombre { get; set; } = string.Empty;
-        public string Apellido { get; set; } = string.Empty;
-        public string? UrlImagen { get; set; }
-        public DateTime? Fecha_Nacimiento { get; set; }
+   
     }
 }
