@@ -9,5 +9,6 @@ namespace cursoCore2API.DTOs
 
         [Required]
         public string Password { get; set; } = string.Empty;
+
     }
 }

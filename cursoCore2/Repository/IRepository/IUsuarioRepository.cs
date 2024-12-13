@@ -10,7 +10,7 @@ namespace cursoCore2API.Repository.IRepository
         bool IsUniqueUser(string usuario);
 
         Task<UsuarioLoginrespuestaDto> Login(UsuarioLoginDto usuarioLoginDto);
-        Task<UsuarioDatosDto> Registro(UsuarioRe usuarioLoginDto);
+        Task<User> Registro(UsuarioRegistroDto usuarioRegistroDto);
 
 
 
