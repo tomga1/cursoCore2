@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 
 namespace cursoCore2API.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
+    [Route("api/categorias")]
     [ApiController]
     public class CategoriasController : ControllerBase
     {

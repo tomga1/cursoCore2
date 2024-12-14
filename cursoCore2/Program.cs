@@ -35,6 +35,8 @@ builder.Services.AddTransient<UserRepository>();
 builder.Services.AddScoped<IproductoRepository, ProductoRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
 
 
 
@@ -65,6 +67,11 @@ builder.Services.AddSwaggerGen(setupAction =>
         }
     });
 });
+
+builder.Services.AddCors(p => p.AddPolicy("PoliticaCors", build =>
+{
+    build.WithOrigins("https://localhost:7243").AllowAnyMethod().AllowAnyHeader();
+}));
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer(options =>
@@ -106,6 +113,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+//Soporte para CORS
+app.UseCors("PoliticaCors");
 
 app.UseAuthorization();
 
