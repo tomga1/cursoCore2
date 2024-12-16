@@ -17,6 +17,7 @@ using cursoCore2API.AutoMappers;
 using cursoCore2API.Repository.IRepository;
 using cursoCore2API.Data;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -99,6 +100,10 @@ builder.Services.AddAuthentication("Bearer")
 //Mappers
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
+//Configuramos el Authentication
+
+
+
 
 var app = builder.Build();
 
@@ -116,6 +121,13 @@ app.UseHttpsRedirection();
 
 //Soporte para CORS
 app.UseCors("PoliticaCors");
+
+//Soporte para autenticacion
+app.UseAuthentication(
+        x => x.DefaultAuthenticateScheme = JwtBearerDefaults
+    );
+
+
 
 app.UseAuthorization();
 
