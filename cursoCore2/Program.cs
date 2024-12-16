@@ -123,9 +123,19 @@ app.UseHttpsRedirection();
 app.UseCors("PoliticaCors");
 
 //Soporte para autenticacion
-app.UseAuthentication(
-        x => x.DefaultAuthenticateScheme = JwtBearerDefaults
-    );
+app.UseAuthentication
+    (
+        x => 
+        {
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }
+    ).AddJwtBearer(x =>
+    {
+        x.RequireHttpsMetadata = false;
+        x.SaveToken = true; 
+        x.TokenValidationParameters = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)
+    })
 
 
 
