@@ -5,12 +5,12 @@ namespace cursoCore2API.Repository.IRepository
 {
     public interface IUsuarioRepository
     {
-        ICollection<User> GetUsuarios();
-        User GetUsuario(int usuarioId);
+        ICollection<AppUser> GetUsuarios();
+        AppUser GetUsuario(string usuarioId);
         bool IsUniqueUser(string usuario);
 
         Task<UsuarioLoginrespuestaDto> Login(UsuarioLoginDto usuarioLoginDto);
-        Task<User> Registro(UsuarioRegistroDto usuarioRegistroDto);
+        Task<UsuarioDatosDto> Registro(UsuarioRegistroDto usuarioRegistroDto);
 
 
 

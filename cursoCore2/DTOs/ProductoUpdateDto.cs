@@ -7,6 +7,11 @@
         public int stock { get; set; }
         public string? descripcion { get; set; }
         public decimal precio { get; set; }
-        public string? imagen { get; set; }
+        public string? RutaImagen { get; set; }
+        public string? RutaLocalImagen { get; set; }
+        public IFormFile Imagen { get; set; }
+
+        public int idMarca { get; set; }
+        public int categoriaId { get; set; }
     }
 }

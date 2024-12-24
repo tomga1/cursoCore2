@@ -53,7 +53,7 @@ namespace cursoCore2API.Repository
 
         public bool ExisteCategoria(string nombre)
         {
-            bool valor = _context.categoria.Any(c => c.Nombre.ToLower().Trim() == nombre.ToLower().Trim());
+            bool valor = _context.categoria.Any(c => c.categoria_nombre.ToLower().Trim() == nombre.ToLower().Trim());
             return valor;   
         }
 
@@ -65,7 +65,7 @@ namespace cursoCore2API.Repository
 
         public ICollection<Categoria> GetCategorias()
         {
-            return _context.categoria.OrderBy(c => c.Nombre).ToList();  
+            return _context.categoria.OrderBy(c => c.categoria_nombre).ToList();  
         }
 
         public bool Guardar()

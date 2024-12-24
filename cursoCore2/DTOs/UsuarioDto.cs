@@ -6,7 +6,7 @@ namespace cursoCore2API.DTOs
     public class UsuarioDto
     {
         
-        public int Id { get; set; }
+        public string Id { get; set; }
         [Required]
         public string Username { get; set; } = string.Empty;
 

@@ -5,7 +5,7 @@
 namespace cursoCore2API.Migrations
 {
     /// <inheritdoc />
-    public partial class Modelousermodificado : Migration
+    public partial class Rutadeimagenesagregado : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

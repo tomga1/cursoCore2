@@ -53,10 +53,24 @@ namespace cursoCore2API.Repository
             return _context.productos.FirstOrDefault(c => c.idProducto == productoId);
         }
 
+        //V1
 
-        public ICollection<Producto> GetProductos()
+        //public ICollection<Producto> GetProductos()
+        //{
+        //    return _context.productos.OrderBy(c => c.nombre).ToList();  
+        //}
+
+        public ICollection<Producto> GetProductos(int pageNumber, int pageSize)
         {
-            return _context.productos.OrderBy(c => c.nombre).ToList();  
+            return _context.productos.OrderBy(c => c.nombre)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+        }
+
+        public int GetTotalProductos()
+        {
+            return _context.productos.Count();
         }
 
         public bool Guardar()

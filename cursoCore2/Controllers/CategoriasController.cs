@@ -6,6 +6,7 @@ using System.Data;
 using AutoMapper;
 using cursoCore2API.Models;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 
 namespace cursoCore2API.Controllers
 {
@@ -60,6 +61,8 @@ namespace cursoCore2API.Controllers
             return Ok(itemCategoriaDto);
         }
 
+
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -77,7 +80,7 @@ namespace cursoCore2API.Controllers
             }
             
 
-            if (_repository.ExisteCategoria(crearCategoriaDto.Nombre))
+            if (_repository.ExisteCategoria(crearCategoriaDto.categoria_nombre))
             {
                 ModelState.AddModelError("", "La categoria ya existe! ");
                 return StatusCode(404, ModelState);
@@ -87,18 +90,19 @@ namespace cursoCore2API.Controllers
 
             if (!_repository.CrearCategoria(categoria))
             {
-                ModelState.AddModelError("", $"Algo salió mal guardando el registro {categoria.Nombre}");
+                ModelState.AddModelError("", $"Algo salió mal guardando el registro {categoria.categoria_nombre}");
                 return StatusCode(404, ModelState);
             }
             return CreatedAtRoute("GetCategoria", new { categoriaId = categoria.categoriaId }, categoria);
         }
 
+
+        [Authorize(Roles = "admin")]
         [HttpPatch("{categoriaId:int}", Name = "GetCategoria")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
         public IActionResult ActualizarPatchCategoria(int categoriaId, [FromBody] CategoriaDto CategoriaDto)
         {
             if (!ModelState.IsValid)
@@ -123,7 +127,7 @@ namespace cursoCore2API.Controllers
 
             if (!_repository.ActualizarCategoria(categoria))
             {
-                ModelState.AddModelError("", $"Algo salió mal actualizando el registro {categoria.Nombre}");
+                ModelState.AddModelError("", $"Algo salió mal actualizando el registro {categoria.categoria_nombre}");
                 return StatusCode(500, ModelState);
             }
             return NoContent();
@@ -131,6 +135,7 @@ namespace cursoCore2API.Controllers
 
 
 
+        [Authorize(Roles = "admin")]
         [HttpPut("{categoriaId:int}", Name = "ActualizarPutCategoria")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -162,12 +167,14 @@ namespace cursoCore2API.Controllers
 
             if (!_repository.ActualizarCategoria(categoria))
             {
-                ModelState.AddModelError("", $"Algo salió mal actualizando el registro {categoria.Nombre}");
+                ModelState.AddModelError("", $"Algo salió mal actualizando el registro {categoria.categoria_nombre}");
                 return StatusCode(500, ModelState);
             }
             return NoContent();
         }
 
+
+        [Authorize(Roles = "admin")]
         [HttpDelete("{categoriaId:int}", Name = "BorrarCategoria")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -191,7 +198,7 @@ namespace cursoCore2API.Controllers
 
             if (!_repository.BorrarCategoria(categoria))
             {
-                ModelState.AddModelError("", $"Algo salió mal borrando el registro {categoria.Nombre}");
+                ModelState.AddModelError("", $"Algo salió mal borrando el registro {categoria.categoria_nombre}");
                 return StatusCode(500, ModelState);
             }
             return NoContent();

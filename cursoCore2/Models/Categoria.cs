@@ -7,7 +7,7 @@ namespace cursoCore2API.Models
         [Key]
         public int categoriaId { get; set; }
         [Required]  
-        public string? Nombre { get; set; }
+        public string? categoria_nombre { get; set; }
         [Required]
         public DateTime FechaCreacion { get; set; }
     }

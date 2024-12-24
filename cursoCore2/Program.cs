@@ -18,16 +18,35 @@ using cursoCore2API.Repository.IRepository;
 using cursoCore2API.Data;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddDbContext<StoreContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("StoreConnection")));
 
+
+//Soporte para autenticacion con .NET Identity
+
+
+builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<StoreContext>();
+
+
+//Soporte para cache
+builder.Services.AddResponseCaching();
+
+
+
 // Add services to the container.
 
+builder.Services.AddControllers(options =>
+{
+    //Cache profile. Un cache global y asi no tener que ponerlo en todas partes 
+    options.CacheProfiles.Add("PorDefecto30Segundos", new CacheProfile() { Duration = 30});
+});
 
-builder.Services.AddControllers();
+
 builder.Services.AddTransient<UserRepository>();
 //builder.Services.AddKeyedScoped<ICommonService<ProductoDto, ProductoInsertDto, ProductoUpdateDto>, ProductoService>("productoService");
 
@@ -37,6 +56,8 @@ builder.Services.AddScoped<IproductoRepository, ProductoRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
+var key = builder.Configuration.GetValue<string>("Authentication:SecretForKey");
 
 
 
@@ -50,9 +71,11 @@ builder.Services.AddSwaggerGen(setupAction =>
     {
         Type = SecuritySchemeType.Http,
         Scheme = "Bearer",
-        Description = "Aca pegar el token generado"
+        Description = "Aca pegar el token generado",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
     });
-
+ 
     setupAction.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -62,7 +85,10 @@ builder.Services.AddSwaggerGen(setupAction =>
                 {
                     Type = ReferenceType.SecurityScheme,
                     Id = "cursoCore2API"
-                }
+                },
+                Scheme = "oauth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header
             },
             new List<string>()
         }
@@ -74,20 +100,20 @@ builder.Services.AddCors(p => p.AddPolicy("PoliticaCors", build =>
     build.WithOrigins("https://localhost:7243").AllowAnyMethod().AllowAnyHeader();
 }));
 
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new()
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Authentication:Issuer"],
-            ValidAudience = builder.Configuration["Authentication:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Authentication:SecretForKey"]))
-        };
-    }
-    );
+//builder.Services.AddAuthentication("Bearer")
+//    .AddJwtBearer(options =>
+//    {
+//        options.TokenValidationParameters = new()
+//        {
+//            ValidateIssuer = true,
+//            ValidateAudience = true,
+//            ValidateIssuerSigningKey = true,
+//            ValidIssuer = builder.Configuration["Authentication:Issuer"],
+//            ValidAudience = builder.Configuration["Authentication:Audience"],
+//            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Authentication:SecretForKey"]))
+//        };
+//    }
+//    );
 
 
  
@@ -100,9 +126,28 @@ builder.Services.AddAuthentication("Bearer")
 //Mappers
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-//Configuramos el Authentication
 
+//Soporte para autenticacion
+builder.Services.AddAuthentication
+    (
+        x =>
+        {
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }
+    ).AddJwtBearer(x =>
+    {
+        x.RequireHttpsMetadata = false;
+        x.SaveToken = true;
+        x.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
 
+    });
 
 
 var app = builder.Build();
@@ -117,27 +162,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+//Soporte para archivos estatricos como imagenes 
+app.UseStaticFiles();
+
 app.UseHttpsRedirection();
 
 //Soporte para CORS
 app.UseCors("PoliticaCors");
 
-//Soporte para autenticacion
-app.UseAuthentication
-    (
-        x => 
-        {
-            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        }
-    ).AddJwtBearer(x =>
-    {
-        x.RequireHttpsMetadata = false;
-        x.SaveToken = true; 
-        x.TokenValidationParameters = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)
-    })
 
 
+app.UseAuthentication();
 
 app.UseAuthorization();
 

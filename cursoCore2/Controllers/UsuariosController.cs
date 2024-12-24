@@ -2,9 +2,9 @@
 using cursoCore2API.DTOs;
 using cursoCore2API.Models;
 using cursoCore2API.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using XAct;
 
 namespace cursoCore2API.Controllers
 {
@@ -24,6 +24,7 @@ namespace cursoCore2API.Controllers
         }
 
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -41,12 +42,13 @@ namespace cursoCore2API.Controllers
         }
 
 
-        [HttpGet("{usuarioId:int}", Name = "GetUsuario")]
+        [Authorize(Roles = "Admin")]
+        [HttpGet("{usuarioId}", Name = "GetUsuario")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetUsuario(int usuarioId)
+        public IActionResult GetUsuario(string usuarioId)
         {
             var itemUsuario = _repository.GetUsuario(usuarioId);
 
@@ -61,6 +63,8 @@ namespace cursoCore2API.Controllers
             return Ok(itemUsuarioDto);
         }
 
+
+        [AllowAnonymous]
         [HttpPost("registro")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -90,7 +94,7 @@ namespace cursoCore2API.Controllers
             return Ok(_respuestaApi); 
         }
 
-
+        [AllowAnonymous]
         [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

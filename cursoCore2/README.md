@@ -1,7 +1,7 @@
 # cursoCore2
 
 COMANDO PARA AGREGAR MIGRATION
-dotnet ef migrations add "Modelo user modificado"
+dotnet ef migrations add "Rutade imagenes agregado"
 
 ACTUALIZAR BASE
 dotnet ef database update

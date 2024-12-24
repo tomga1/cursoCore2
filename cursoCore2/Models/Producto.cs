@@ -21,7 +21,9 @@ namespace cursoCore2API.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal precio { get; set; }
 
-        public string? imagen { get; set; }
+        public string? RutaImagen { get; set; }
+        public string? RutaLocalImagen { get; set; }
+
 
         public int idMarca { get; set; }
 
