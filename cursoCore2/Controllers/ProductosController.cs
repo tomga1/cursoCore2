@@ -45,28 +45,38 @@ namespace cursoCore2API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult Getproductos()
+        public IActionResult Getproductos([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 2)
         {
 
             try
             {
-                var totalProductos = _prodRepo
+                var totalProductos = _prodRepo.GetTotalProductos();
+                var productos = _prodRepo.GetProductos(pageNumber, pageSize);
+
+                if (productos == null || !productos.Any())
+                {
+                    return NotFound("No se encontraron productos.");
+                }
+
+                var productosDto = productos.Select(p => _mapper.Map<ProductoDto>(p)).ToList();
+
+                var response = new
+                {
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    TotalPages = (int)Math.Ceiling(totalProductos / (double)pageSize),
+                    TotalItems = totalProductos,
+                    Items = productosDto
+                };
+
+
+                return Ok();
             }
             catch (Exception)
             {
 
-                throw;
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error recuperando datos de la aplicacion");
             }
-
-            var listaProductos = _prodRepo.GetProductos();
-
-            var listaProductosDto = new List<ProductoDto>();
-
-            foreach (var lista in listaProductos)
-            {
-                listaProductosDto.Add(_mapper.Map<ProductoDto>(lista));
-            }
-            return Ok(listaProductosDto);
         }
 
 

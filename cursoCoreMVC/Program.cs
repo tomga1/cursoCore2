@@ -1,3 +1,5 @@
+using cursoCoreMVC.Repository;
+using cursoCoreMVC.Repository.IRepository;
 using cursoCoreMVC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,9 +7,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+//Configurar cliente HTTP
+builder.Services.AddHttpClient<IproductoService, ProductoService>();
+builder.Services.AddHttpClient();
+
+
+
+
+builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+
 builder.Services.AddScoped<IService_API, Service_API>();
 builder.Services.AddScoped<IproductoService, ProductoService>();
-builder.Services.AddHttpClient<IproductoService, ProductoService>();
  
 var app = builder.Build();
 

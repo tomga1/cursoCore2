@@ -97,7 +97,8 @@ builder.Services.AddSwaggerGen(setupAction =>
 
 builder.Services.AddCors(p => p.AddPolicy("PoliticaCors", build =>
 {
-    build.WithOrigins("https://localhost:7243").AllowAnyMethod().AllowAnyHeader();
+    //build.WithOrigins("https://localhost:7243").AllowAnyMethod().AllowAnyHeader();
+    build.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
 }));
 
 //builder.Services.AddAuthentication("Bearer")
