@@ -2,8 +2,7 @@
 
 namespace cursoCoreMVC.Repository.IRepository
 {
-    public interface ICategoriaRepository : IRepository<Categoria>
+    public interface IUsuarioRepository : IRepository<User>
     {
-
     }
 }

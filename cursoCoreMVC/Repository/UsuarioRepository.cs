@@ -3,12 +3,12 @@ using cursoCoreMVC.Repository.IRepository;
 
 namespace cursoCoreMVC.Repository
 {
-    public class CategoriaRepository : Repository<Categoria>, ICategoriaRepository
+    public class UsuarioRepository : Repository<User>, IUsuarioRepository
     {
         //injeccion de dependencias se debe importar el ihttpclientfactory
         private readonly IHttpClientFactory _clientFactory;
 
-        public CategoriaRepository(IHttpClientFactory clientFactory) : base (clientFactory)   
+        public UsuarioRepository(IHttpClientFactory clientFactory) : base(clientFactory)
         {
             _clientFactory = clientFactory; 
         }

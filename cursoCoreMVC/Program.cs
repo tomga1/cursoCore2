@@ -15,6 +15,8 @@ builder.Services.AddHttpClient();
 
 
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
+
 
 builder.Services.AddScoped<IService_API, Service_API>();
 builder.Services.AddScoped<IproductoService, ProductoService>();
