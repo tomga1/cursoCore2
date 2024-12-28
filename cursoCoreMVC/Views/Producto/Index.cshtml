@@ -6,7 +6,7 @@
     <div class="row mb-4">
         <div class="col-8">
 
-            <h2 class="text-primary">
+            <h2 class="text-black">
                 <i class="fas fa-list-alt"> </i> Lista de Productos
             </h2>
         </div>
@@ -31,6 +31,8 @@
                     <th scope="col">Precio</th>
                     <th scope="col">Marca</th>
                     <th scope="col">Categoria</th>
+                    <th scope="col">Acciones</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -43,4 +45,9 @@
 
 @section Scripts{
     <script src="~/js/producto.js"></script>
+    <script>
+        $(document).ready(function () {
+            loadDataTable(); 
+        });
+    </script>
 }

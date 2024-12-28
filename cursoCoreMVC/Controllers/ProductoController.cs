@@ -1,7 +1,9 @@
 ﻿using cursoCoreMVC.Models;
 using cursoCoreMVC.Repository.IRepository;
 using cursoCoreMVC.Services;
+using cursoCoreMVC.Utility;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata;
 
 namespace cursoCoreMVC.Controllers
 {
@@ -33,6 +35,12 @@ namespace cursoCoreMVC.Controllers
         public IActionResult Index()
         {
             return View(new Productos() { });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllProductos() 
+        {
+            return Json(new { data = await _repoProducto.GetAllAsync(Constante.RutaProductosApi)});
         }
     }
 }

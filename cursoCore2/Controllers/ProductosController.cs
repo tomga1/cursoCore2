@@ -70,7 +70,7 @@ namespace cursoCore2API.Controllers
                 };
 
 
-                return Ok();
+                return Ok(response);
             }
             catch (Exception)
             {
