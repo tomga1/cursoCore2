@@ -38,9 +38,16 @@ namespace cursoCoreMVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllProductos() 
+        public async Task<IActionResult> Getproductos() 
         {
-            return Json(new { data = await _repoProducto.GetAllAsync(Constante.RutaProductosApi)});
+            
+            return Json(new { data = await _repoProducto.GetProductosAsync(Constante.RutaProductosApi)});
+        }
+
+        [HttpGet]
+        public IActionResult Create() 
+        {
+            return View();
         }
     }
 }

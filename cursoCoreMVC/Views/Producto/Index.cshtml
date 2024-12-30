@@ -1,11 +1,10 @@
 ﻿@{
-    ViewData["Title"] = "Lista de productos"; 
+    ViewData["Title"] = "Productos";
 }
 
-<div class="container py-4">   
+<<div class="container py-4">
     <div class="row mb-4">
         <div class="col-8">
-
             <h2 class="text-black">
                 <i class="fas fa-list-alt"> </i> Lista de Productos
             </h2>
@@ -14,40 +13,54 @@
         <div class="col-4 text-end">
             <a asp-action="Create" class="btn btn-success text-white">
                 <i class="fas fa-plus"> </i> Crear nuevo Producto
-
             </a>
-
         </div>
     </div>
 
-    <div class="table-responsive">
-        <table id="tblProductos" class="table table-striped table-bordered">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Stock</th>
-                    <th scope="col">Descripcion</th>
-                    <th scope="col">Precio</th>
-                    <th scope="col">Marca</th>
-                    <th scope="col">Categoria</th>
-                    <th scope="col">Acciones</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Aca van las filas generadas por DataTables -->
-            </tbody>
-        </table>
+    <div id="productos-container" class="table-responsive">
+        <!-- Aquí se cargarán los productos -->
     </div>
 </div>
 
-
 @section Scripts{
-    <script src="~/js/producto.js"></script>
     <script>
-        $(document).ready(function () {
-            loadDataTable(); 
-        });
+        function loadProductos() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://localhost:7243/api/productos/Getproductos', true);
+            xhr.setRequestHeader('Accept', 'application/json');
+
+            xhr.onload = function() {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    var data = JSON.parse(xhr.responseText);
+                    console.log(data);  // Muestra los datos en la consola
+
+                    let productosHtml = '<table class="table table-striped table-bordered"><thead class="table-dark"><tr><th>Id</th><th>Nombre</th><th>Stock</th><th>Descripcion</th><th>Precio</th></tr></thead><tbody>';
+
+                    data.data.forEach(producto => {
+                        productosHtml += `<tr>
+                            <td>${producto.id}</td>
+                            <td>${producto.nombre}</td>
+                            <td>${producto.stock}</td>
+                            <td>${producto.descripcion}</td>
+                            <td>${producto.precio}</td>
+                        </tr>`;
+                    });
+
+                    productosHtml += '</tbody></table>';
+                    document.getElementById('productos-container').innerHTML = productosHtml;
+                } else {
+                    console.error('Error al obtener los productos:', xhr.status, xhr.statusText);
+                }
+            };
+
+            xhr.onerror = function() {
+                console.error('Error de conexión');
+            };
+
+            xhr.send();
+        }
+
+        document.addEventListener('DOMContentLoaded', loadProductos);
     </script>
 }
+

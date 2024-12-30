@@ -42,7 +42,7 @@ namespace cursoCore2API.Controllers
 
 
         //VERSION 2 CON PAGINADO
-        [HttpGet]
+        [HttpGet("Getproductos")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult Getproductos([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 2)
@@ -62,11 +62,11 @@ namespace cursoCore2API.Controllers
 
                 var response = new
                 {
+                    data = productosDto,
                     PageNumber = pageNumber,
                     PageSize = pageSize,
                     TotalPages = (int)Math.Ceiling(totalProductos / (double)pageSize),
                     TotalItems = totalProductos,
-                    Items = productosDto
                 };
 
 
@@ -319,7 +319,6 @@ namespace cursoCore2API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
         public IActionResult Buscar(string nombre)
         {
 
