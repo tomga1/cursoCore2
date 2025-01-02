@@ -10,6 +10,7 @@ namespace cursoCore2API.Controllers
 {
     [Route("api/productos")]
     [ApiController]
+    [AllowAnonymous]
     public class ProductosController : ControllerBase
     {
         private readonly IproductoRepository _prodRepo;
@@ -102,8 +103,8 @@ namespace cursoCore2API.Controllers
 
 
 
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
+        //[Authorize(Roles = "Admin")]
+        [HttpPost("Create")]
         [ProducesResponseType(201, Type = typeof(ProductoDto))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

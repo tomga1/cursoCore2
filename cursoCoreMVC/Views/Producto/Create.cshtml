@@ -15,32 +15,70 @@
 
     <div class="row">
         <div class="col-12">
-            <form method="POST" asp-action="Create">
+            <form method="POST" asp-action="Create" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
+                <!-- Campo Nombre -->
                 <div class="form-group row mb-3">
                     <label asp-for="nombre" class="col-4 col-form-label"></label>
-                        <div class="col-8">
-                            <input asp-for="nombre" class="form-control" placeholder="Ingresa el nombre del Producto" />
-                            <span asp-validation-for="nombre" class="text-danger"></span>
-                        </div>
+                    <div class="col-8">
+                        <input asp-for="nombre" class="form-control" placeholder="Ingresa el nombre del Producto" />
+                        <span asp-validation-for="nombre" class="text-danger"></span>
                     </div>
+                </div>
+
+                <!-- Campo Stock -->
+                <div class="form-group row mb-3">
+                    <label asp-for="stock" class="col-4 col-form-label"></label>
+                    <div class="col-8">
+                        <input asp-for="stock" class="form-control" placeholder="Cantidad en Stock" type="number" />
+                        <span asp-validation-for="stock" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Campo Descripción -->
+                <div class="form-group row mb-3">
+                    <label asp-for="descripcion" class="col-4 col-form-label"></label>
+                    <div class="col-8">
+                        <textarea asp-for="descripcion" class="form-control" placeholder="Descripción del Producto"></textarea>
+                        <span asp-validation-for="descripcion" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Campo Precio -->
+                <div class="form-group row mb-3">
+                    <label asp-for="precio" class="col-4 col-form-label"></label>
+                    <div class="col-8">
+                        <input asp-for="precio" class="form-control" placeholder="Precio del Producto" type="number" step="0.01" />
+                        <span asp-validation-for="precio" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Campo Imagen -->
+                <div class="form-group row mb-3">
+                    <label for="imagen" class="col-4 col-form-label">Seleccionar Imagen</label>
+                    <div class="col-8">
+                        <input type="file" name="imagen" class="form-control-file" />
+                    </div>
+                </div>
 
 
+                <!-- Botones -->
                 <div class="form-group row">
-                        <div class="col-6">
-                            <button type="submit" class="btn btn-primary w-100">
-                                <i class="fas fa-plus"></i> Crear Producto
-                            </button>
-                        </div>
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-plus"></i> Crear Producto
+                        </button>
+                    </div>
 
                     <div class="col-6">
                         <a asp-action="Index" class="btn btn-secondary w-100">
-                            <i class="fas fa-arrow-left"> Volver</i>
+                            <i class="fas fa-arrow-left"></i> Volver
                         </a>
                     </div>
-                </div>      
+                </div>
             </form>
         </div>
     </div>
+
 </div>
