@@ -54,8 +54,8 @@ builder.Services.AddTransient<UserRepository>();
 //builder.Services.AddScoped<IRepository<Producto>, ProductoRepository>();
 builder.Services.AddScoped<IproductoRepository, ProductoRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
-
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
 
 var key = builder.Configuration.GetValue<string>("Authentication:SecretForKey");
 
@@ -152,8 +152,6 @@ builder.Services.AddAuthentication
 
 
 var app = builder.Build();
-
-
 
 
 // Configure the HTTP request pipeline.

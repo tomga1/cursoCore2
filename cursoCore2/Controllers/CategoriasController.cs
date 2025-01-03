@@ -7,12 +7,14 @@ using AutoMapper;
 using cursoCore2API.Models;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
+using XAct;
 
 namespace cursoCore2API.Controllers
 {
     //[Route("api/[controller]")]
     [Route("api/categorias")]
     [ApiController]
+    [AllowAnonymous]
     public class CategoriasController : ControllerBase
     {
         private readonly ICategoriaRepository _repository;
@@ -21,7 +23,6 @@ namespace cursoCore2API.Controllers
         {
             _repository = repository;  
             _mapper = mapper; 
-
         }
 
         [HttpGet]
@@ -61,8 +62,7 @@ namespace cursoCore2API.Controllers
             return Ok(itemCategoriaDto);
         }
 
-
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -88,7 +88,7 @@ namespace cursoCore2API.Controllers
 
             var categoria = _mapper.Map<Categoria>(crearCategoriaDto);
 
-            if (!_repository.CrearCategoria(categoria))
+            if (!_repository.Add(categoria))
             {
                 ModelState.AddModelError("", $"Algo salió mal guardando el registro {categoria.categoria_nombre}");
                 return StatusCode(404, ModelState);
@@ -98,7 +98,7 @@ namespace cursoCore2API.Controllers
 
 
         [Authorize(Roles = "admin")]
-        [HttpPatch("{categoriaId:int}", Name = "GetCategoria")]
+        [HttpPatch("{categoriaId:int}", Name = "ActualizarPatchCategoria")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -125,7 +125,7 @@ namespace cursoCore2API.Controllers
 
             var categoria = _mapper.Map<Categoria>(CategoriaDto);
 
-            if (!_repository.ActualizarCategoria(categoria))
+            if (!_repository.Update(categoria))
             {
                 ModelState.AddModelError("", $"Algo salió mal actualizando el registro {categoria.categoria_nombre}");
                 return StatusCode(500, ModelState);
@@ -165,7 +165,7 @@ namespace cursoCore2API.Controllers
             var categoria = _mapper.Map<Categoria>(CategoriaDto);
 
 
-            if (!_repository.ActualizarCategoria(categoria))
+            if (!_repository.Update(categoria))
             {
                 ModelState.AddModelError("", $"Algo salió mal actualizando el registro {categoria.categoria_nombre}");
                 return StatusCode(500, ModelState);
@@ -196,7 +196,7 @@ namespace cursoCore2API.Controllers
 
 
 
-            if (!_repository.BorrarCategoria(categoria))
+            if (!_repository.Remove(categoria))
             {
                 ModelState.AddModelError("", $"Algo salió mal borrando el registro {categoria.categoria_nombre}");
                 return StatusCode(500, ModelState);

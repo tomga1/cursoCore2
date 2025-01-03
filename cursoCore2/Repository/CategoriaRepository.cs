@@ -4,73 +4,36 @@ using cursoCore2API.Repository.IRepository;
 
 namespace cursoCore2API.Repository
 {
-    public class CategoriaRepository : ICategoriaRepository
+    public class CategoriaRepository : RepositoryBase<Categoria>, ICategoriaRepository
     {
-        private readonly StoreContext _context;
-
-        public CategoriaRepository(StoreContext context)
+        public CategoriaRepository(StoreContext context) : base(context)
         {
-            _context = context; 
         }
 
-
-
-        public bool CrearCategoria(Categoria categoria)
+        public ICollection<Categoria> GetCategorias()
         {
-            categoria.FechaCreacion = DateTime.Now;
-            _context.categoria.Add(categoria);
-            return Guardar();
-        }
-        public bool ActualizarCategoria(Categoria categoria)
-        {
-            categoria.FechaCreacion = DateTime.Now;
-            var categoriaExistente = _context.categoria.Find(categoria.categoriaId);
-
-            if(categoriaExistente  != null)
-            {
-                _context.Entry(categoriaExistente).CurrentValues.SetValues(categoria);
-
-            }
-            else
-            {
-                _context.categoria.Update(categoria);
-            }
-            _context.categoria.Update(categoria);
-            return Guardar();    
-        }
-
-
-        public bool BorrarCategoria(Categoria categoria)
-        {
-            _context.categoria.Remove(categoria);
-            return Guardar();
-        }
-
-        public bool ExisteCategoria(int id)
-        {
-            return _context.categoria.Any(c => c.categoriaId == id); 
-        }
-
-        public bool ExisteCategoria(string nombre)
-        {
-            bool valor = _context.categoria.Any(c => c.categoria_nombre.ToLower().Trim() == nombre.ToLower().Trim());
-            return valor;   
+            return _dbSet.OrderBy(c => c.categoria_nombre).ToList();
         }
 
         public Categoria GetCategoria(int categoriaId)
         {
-            return _context.categoria.FirstOrDefault(c => c.categoriaId == categoriaId);
+            return _dbSet.FirstOrDefault(c => c.categoriaId == categoriaId);
         }
 
-
-        public ICollection<Categoria> GetCategorias()
+        public override bool Add(Categoria categoria)
         {
-            return _context.categoria.OrderBy(c => c.categoria_nombre).ToList();  
+            categoria.FechaCreacion = DateTime.Now;
+            return base.Add(categoria); 
         }
 
-        public bool Guardar()
+        public bool ExisteCategoria(int id)
         {
-            return _context.SaveChanges() >= 0 ? true : false;  
+            return _dbSet.Any(c => c.categoriaId == id); 
+        }
+
+        public bool ExisteCategoria(string nombre)
+        {
+            return _dbSet.Any(c => c.categoria_nombre.ToLower().Trim() == nombre.ToLower().Trim());
         }
     }
 }
