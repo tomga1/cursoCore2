@@ -6,66 +6,34 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace cursoCore2API.Repository
 {
-    public class ProductoRepository : IproductoRepository
+    public class ProductoRepository : RepositoryBase<Producto>, IproductoRepository
     {
-        private readonly StoreContext _context;
-
-        public ProductoRepository(StoreContext context)
+        public ProductoRepository(StoreContext context) : base(context)
         {
-            _context = context; 
         }
-
-        public bool ActualizarProducto(Producto producto)
+       
+        public ICollection<Producto> GetProductos(int pageNumber, int pageSize)
         {
-            
-            _context.productos.Update(producto);
-            
-            return Guardar();
-        }
-
-        public bool CrearProducto(Producto producto)
-        {
-            _context.productos.Add(producto);
-            return Guardar();
-        }
-        
-
-
-        public bool BorrarProducto(Producto producto)
-        {
-            _context.productos.Remove(producto);
-            return Guardar();
-        }
-
-        public bool ExisteProducto(int id)
-        {
-            return _context.productos.Any(c => c.idProducto == id); 
-        }
-
-        public bool ExisteProducto(string nombre)
-        {
-            bool valor = _context.productos.Any(c => c.nombre.ToLower().Trim() == nombre.ToLower().Trim());
-            return valor;   
+            return _dbSet.OrderBy(c => c.nombre)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
         }
 
         public Producto GetProducto(int productoId)
         {
-            return _context.productos.FirstOrDefault(c => c.idProducto == productoId);
+            return _dbSet.FirstOrDefault(c => c.idProducto == productoId);
         }
 
-        //V1
-
-        //public ICollection<Producto> GetProductos()
-        //{
-        //    return _context.productos.OrderBy(c => c.nombre).ToList();  
-        //}
-
-        public ICollection<Producto> GetProductos(int pageNumber, int pageSize)
+        public bool ExisteProducto(int id)
         {
-            return _context.productos.OrderBy(c => c.nombre)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
+            return _dbSet.Any(c => c.idProducto == id); 
+        }
+
+        public bool ExisteProducto(string nombre)
+        {
+            bool valor = _dbSet.Any(c => c.nombre.ToLower().Trim() == nombre.ToLower().Trim());
+            return valor;   
         }
 
         public int GetTotalProductos()
