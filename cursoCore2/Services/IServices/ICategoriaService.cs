@@ -6,7 +6,7 @@ namespace cursoCore2API.Services.IServices
     public interface ICategoriaService
     {
         Task<List<CategoriaDto>> GetCategoriasAsync();
-        //Task<CategoriaDto> GetCategoriaByIdAsync(int id);
-        
+        Task<CategoriaDto> GetCategoriaByIdAsync(int id);
+
     }
 }

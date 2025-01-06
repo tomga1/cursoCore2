@@ -8,7 +8,7 @@ namespace cursoCore2API.Repository.IRepository
         bool Add(T entity);
         bool Update(T entity);
         bool Remove(T entity);
-        T GetById(int id);
+        Task<T> GetByIdAsync(int id);
         IEnumerable<T> GetAll();
         IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
         bool SaveChanges();

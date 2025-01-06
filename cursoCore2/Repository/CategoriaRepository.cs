@@ -16,9 +16,9 @@ namespace cursoCore2API.Repository
             return await _dbSet.OrderBy(c => c.categoria_nombre).ToListAsync();
         }
 
-        public Categoria GetCategoria(int categoriaId)
+        public async Task<Categoria> GetCategoriaByid(int categoriaId)
         {
-            return _dbSet.FirstOrDefault(c => c.categoriaId == categoriaId);
+            return await _dbSet.FirstOrDefaultAsync(c => c.categoriaId == categoriaId);
         }
 
         public bool ExisteCategoria(int id)

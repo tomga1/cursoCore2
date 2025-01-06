@@ -35,9 +35,9 @@ namespace cursoCore2API.Repository
             return SaveChanges();
         }
 
-        public T GetById(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
-            return _dbSet.Find(id);
+            return await _dbSet.FindAsync(id);
         }
 
         public IEnumerable<T> GetAll()

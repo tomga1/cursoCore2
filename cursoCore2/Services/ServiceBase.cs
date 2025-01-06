@@ -32,9 +32,18 @@ namespace cursoCore2API.Services.IServices
             throw new NotImplementedException();
         }
 
-        public Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _repository.GetByIdAsync(id);
+
+            if (entity == null)
+            {
+                return default; 
+            }
+            
+            var dto = _mapper.Map<T>(entity);
+
+            return dto;
         }
 
         public Task<IEnumerable<T>> GetAllAsync()

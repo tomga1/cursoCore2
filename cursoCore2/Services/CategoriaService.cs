@@ -2,6 +2,7 @@
 using cursoCore2API.DTOs;
 using cursoCore2API.Repository.IRepository;
 using cursoCore2API.Services.IServices;
+using System.Text;
 
 namespace cursoCore2API.Services
 {
@@ -23,6 +24,20 @@ namespace cursoCore2API.Services
 
         }
 
+
+        public async Task<CategoriaDto> GetCategoriaByIdAsync(int id)
+        {
+            var categoria = await _repository.GetCategoriaByid(id);
+
+            if(categoria == null)
+            {
+                return default; 
+            }
+
+            var categoriaDto = _mapper.Map<CategoriaDto>(categoria);
+
+            return categoriaDto;
+        }
 
 
 
