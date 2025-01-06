@@ -1,6 +1,7 @@
 ﻿using cursoCore2API.Data;
 using cursoCore2API.Models;
 using cursoCore2API.Repository.IRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace cursoCore2API.Repository
 {
@@ -10,19 +11,14 @@ namespace cursoCore2API.Repository
         {
         }
 
-        public ICollection<Categoria> GetCategorias()
+        public async Task<ICollection<Categoria>> GetCategoriasAsync()
         {
-            return _dbSet.OrderBy(c => c.categoria_nombre).ToList();
+            return await _dbSet.OrderBy(c => c.categoria_nombre).ToListAsync();
         }
 
         public Categoria GetCategoria(int categoriaId)
         {
             return _dbSet.FirstOrDefault(c => c.categoriaId == categoriaId);
-        }
-
-        public override bool Add(Categoria categoria)
-        {
-            return base.Add(categoria); 
         }
 
         public bool ExisteCategoria(int id)

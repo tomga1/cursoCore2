@@ -4,7 +4,7 @@ namespace cursoCore2API.Repository.IRepository
 {
     public interface ICategoriaRepository : IRepositoryBase<Categoria>
     {
-        ICollection<Categoria> GetCategorias();
+        Task<ICollection<Categoria>> GetCategoriasAsync();
         Categoria GetCategoria(int categoriaId);
         bool ExisteCategoria(int id);
         bool ExisteCategoria(string nombre);

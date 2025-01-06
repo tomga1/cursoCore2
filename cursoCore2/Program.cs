@@ -20,6 +20,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using cursoCore2API.Services.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +56,9 @@ builder.Services.AddTransient<UserRepository>();
 builder.Services.AddScoped<IproductoRepository, ProductoRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<ICategoriaService, CategoriaService>();
+
+builder.Services.AddScoped(typeof(IServiceBase<,,>), typeof(ServiceBase<,,>));
 
 
 var key = builder.Configuration.GetValue<string>("Authentication:SecretForKey");
