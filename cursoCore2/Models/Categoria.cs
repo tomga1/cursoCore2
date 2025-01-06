@@ -9,6 +9,6 @@ namespace cursoCore2API.Models
         [Required]  
         public string? categoria_nombre { get; set; }
         [Required]
-        public DateTime FechaCreacion { get; set; }
+        public DateTime FechaCreacion { get; set; } = DateTime.Now;
     }
 }

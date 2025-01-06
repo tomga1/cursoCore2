@@ -174,7 +174,7 @@ namespace cursoCore2API.Controllers
                 producto.RutaImagen = "https://placehold.co/600x400"; 
             }
 
-            _prodRepo.CrearProducto(producto);  
+            _prodRepo.Add(producto);  
 
             
             return CreatedAtRoute("GetProducto", new { productoId = producto.idProducto }, producto);
@@ -247,7 +247,7 @@ namespace cursoCore2API.Controllers
                 producto.RutaImagen = "https://placehold.co/600x400";
             }
 
-            _prodRepo.ActualizarProducto(producto);
+            _prodRepo.Update(producto);
             return NoContent();
         }
 
@@ -273,7 +273,7 @@ namespace cursoCore2API.Controllers
             var producto = _prodRepo.GetProducto(productoId);
 
 
-            if (!_prodRepo.BorrarProducto(producto))
+            if (!_prodRepo.Remove(producto))
             {
                 ModelState.AddModelError("", $"Algo salió mal borrando el registro {producto.nombre}");
                 return StatusCode(500, ModelState);

@@ -22,7 +22,6 @@ namespace cursoCore2API.Repository
 
         public override bool Add(Categoria categoria)
         {
-            categoria.FechaCreacion = DateTime.Now;
             return base.Add(categoria); 
         }
 

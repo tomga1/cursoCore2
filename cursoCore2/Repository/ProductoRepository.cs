@@ -38,22 +38,22 @@ namespace cursoCore2API.Repository
 
         public int GetTotalProductos()
         {
-            return _context.productos.Count();
+            return _dbSet.Count();
         }
 
-        public bool Guardar()
-        {
-            return _context.SaveChanges() >= 0 ? true : false;  
-        }
+        //public bool Guardar()
+        //{
+        //    return _context.SaveChanges() >= 0 ? true : false;  
+        //}
 
         public ICollection<Producto> GetProductosEnCategoria(int catId)
         {
-            return _context.productos.Include(pro => pro.Categoria).Where(pro => pro.categoriaId == catId).ToList();   
+            return _dbSet.Include(pro => pro.Categoria).Where(pro => pro.categoriaId == catId).ToList();   
         }
 
         public IEnumerable<Producto> BuscarProducto(string nombre)
         {
-            IQueryable<Producto> query = _context.productos;
+            IQueryable<Producto> query = _dbSet;
             if (!string.IsNullOrEmpty(nombre))
             {
                 query = query.Where(e => e.nombre.Contains(nombre) || e.descripcion.Contains(nombre));
