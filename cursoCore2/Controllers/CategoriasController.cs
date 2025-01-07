@@ -46,9 +46,6 @@ namespace cursoCore2API.Controllers
         }
 
 
-
-
-
         [HttpGet("{categoriaId:int}", Name = "GetCategoria")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -67,11 +64,8 @@ namespace cursoCore2API.Controllers
 
                 var itemCategoriaDto = _mapper.Map<CategoriaDto>(itemCategoria); 
 
-
                 return Ok(itemCategoriaDto);
             
-            
-
         }
 
 
