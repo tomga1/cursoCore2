@@ -23,13 +23,15 @@ namespace cursoCore2API.Controllers
     {
         private readonly ICategoriaRepository _repository;
         private readonly IMapper _mapper;
-        private readonly ICategoriaService _service; 
+        private readonly ICategoriaService _service;
+        private readonly IMessageService _messageService;
 
-        public CategoriasController(ICategoriaRepository repository, IMapper mapper, ICategoriaService service)
+        public CategoriasController(ICategoriaRepository repository, IMapper mapper, ICategoriaService service, IMessageService messageService)
         {
             _repository = repository;  
             _mapper = mapper; 
             _service = service; 
+            _messageService = messageService;   
             
         }
 
@@ -59,7 +61,7 @@ namespace cursoCore2API.Controllers
 
                 if (itemCategoria == null)
                 {
-                    var message = 
+                var message = _messageService.GetMessage("CategoriaNoEncontrada");
                     return NotFound(new { message});
                 }
 

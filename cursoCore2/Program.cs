@@ -57,6 +57,10 @@ builder.Services.AddScoped<IproductoRepository, ProductoRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
+
+
+
 
 builder.Services.AddScoped(typeof(IServiceBase<,,>), typeof(ServiceBase<,,>));
 
