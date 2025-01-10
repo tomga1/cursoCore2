@@ -29,10 +29,10 @@ namespace cursoCore2API.Repository
             return SaveChanges();
         }
 
-        public bool Remove(T entity)
+        public async Task<bool> RemoveAsync(T entity)
         {
             _dbSet.Remove(entity);
-            return SaveChanges();
+            return await SaveChangesAsync();
         }
 
         public async Task<T> GetByIdAsync(int id)
@@ -53,6 +53,10 @@ namespace cursoCore2API.Repository
         public bool SaveChanges()
         {
             return _context.SaveChanges() >= 0;
+        }
+        public async Task<bool> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

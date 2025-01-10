@@ -62,6 +62,7 @@ builder.Services.AddScoped<IMessageService, MessageService>();
 
 
 
+builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 builder.Services.AddScoped(typeof(IServiceBase<,,>), typeof(ServiceBase<,,>));
 
 

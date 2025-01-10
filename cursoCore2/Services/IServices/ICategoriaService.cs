@@ -3,10 +3,11 @@ using cursoCore2API.Models;
 
 namespace cursoCore2API.Services.IServices
 {
-    public interface ICategoriaService
+    public interface ICategoriaService : IServiceBase<Categoria, CategoriaInsertDto, CategoriaUpdateDto>
     {
         Task<List<CategoriaDto>> GetCategoriasAsync();
         Task<CategoriaDto> GetCategoriaByIdAsync(int id);
+        Task<bool> ExisteCategoriaAsync(int id);
 
     }
 }

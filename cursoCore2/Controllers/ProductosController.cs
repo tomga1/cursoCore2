@@ -252,34 +252,34 @@ namespace cursoCore2API.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
-        [HttpDelete("{productoId:int}", Name = "BorrarProducto")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult BorrarProducto(int productoId)
-        {
+        //[Authorize(Roles = "Admin")]
+        //[HttpDelete("{productoId:int}", Name = "BorrarProducto")]
+        //[ProducesResponseType(StatusCodes.Status204NoContent)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //public IActionResult BorrarProducto(int productoId)
+        //{
 
 
-            if (!_prodRepo.ExisteProducto(productoId))
-            {
-                return NotFound();
+        //    if (!_prodRepo.ExisteProducto(productoId))
+        //    {
+        //        return NotFound();
 
-            }
-
-
-            var producto = _prodRepo.GetProducto(productoId);
+        //    }
 
 
-            if (!_prodRepo.Remove(producto))
-            {
-                ModelState.AddModelError("", $"Algo salió mal borrando el registro {producto.nombre}");
-                return StatusCode(500, ModelState);
-            }
-            return NoContent();
-        }
+        //    var producto = _prodRepo.GetProducto(productoId);
+
+
+        //    if (!_prodRepo.Remove(producto))
+        //    {
+        //        ModelState.AddModelError("", $"Algo salió mal borrando el registro {producto.nombre}");
+        //        return StatusCode(500, ModelState);
+        //    }
+        //    return NoContent();
+        //}
 
         [HttpGet("GetProductosenCategoria/{categoriaId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]

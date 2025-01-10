@@ -27,9 +27,16 @@ namespace cursoCore2API.Services.IServices
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _repository.GetByIdAsync(id);
+
+            if(entity == null)
+            {
+                return false; 
+            }
+
+            return await _repository.RemoveAsync(entity);
         }
 
         public async Task<T> GetByIdAsync(int id)

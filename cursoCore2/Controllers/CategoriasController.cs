@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using XAct;
 using cursoCore2API.Services.IServices;
 using XAct.Messages;
+using XAct.Services;
 
 
 
@@ -24,13 +25,15 @@ namespace cursoCore2API.Controllers
         private readonly ICategoriaRepository _repository;
         private readonly IMapper _mapper;
         private readonly ICategoriaService _service;
+        private readonly IServiceBase<Categoria, CategoriaInsertDto, CategoriaUpdateDto> _serviceBase;
         private readonly IMessageService _messageService;
 
-        public CategoriasController(ICategoriaRepository repository, IMapper mapper, ICategoriaService service, IMessageService messageService)
+        public CategoriasController(ICategoriaRepository repository, IMapper mapper, ICategoriaService service, IMessageService messageService, IServiceBase<Categoria, CategoriaInsertDto, CategoriaUpdateDto> serviceBase)
         {
             _repository = repository;  
             _mapper = mapper; 
             _service = service; 
+            _serviceBase = serviceBase;
             _messageService = messageService;   
             
         }
@@ -71,18 +74,6 @@ namespace cursoCore2API.Controllers
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         //[Authorize(Roles = "admin")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -116,6 +107,18 @@ namespace cursoCore2API.Controllers
             }
             return CreatedAtRoute("GetCategoria", new { categoriaId = categoria.categoriaId }, categoria);
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         //[Authorize(Roles = "admin")]
@@ -152,78 +155,76 @@ namespace cursoCore2API.Controllers
         //        return StatusCode(500, ModelState);
         //    }
         //    return NoContent();
+        
+
+
+
+    //[Authorize(Roles = "admin")]
+    //[HttpPut("{categoriaId:int}", Name = "ActualizarPutCategoria")]
+    //[ProducesResponseType(StatusCodes.Status204NoContent)]
+    //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+    //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    //[ProducesResponseType(StatusCodes.Status404NotFound)]
+    //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    //public IActionResult ActualizarPutCategoria(int categoriaId, [FromBody] CategoriaDto CategoriaDto)
+    //{
+    //    if (!ModelState.IsValid)
+    //    {
+    //        return BadRequest(ModelState);
+    //    }
+
+    //    if (CategoriaDto == null || categoriaId != CategoriaDto.categoriaId)
+    //    {
+    //        return BadRequest(ModelState);
+    //    }
+
+    //    var categoriaExistente = _repository.GetCategoria(categoriaId);
+
+    //    if (categoriaExistente == null)
+    //    {
+    //        return NotFound($"No se encontro la categoria con ID {categoriaId}");
+    //    }
+
+
+    //    var categoria = _mapper.Map<Categoria>(CategoriaDto);
+
+
+    //    if (!_repository.Update(categoria))
+    //    {
+    //        ModelState.AddModelError("", $"Algo salió mal actualizando el registro {categoria.categoria_nombre}");
+    //        return StatusCode(500, ModelState);
+    //    }
+    //    return NoContent();
+    //}
+
+
+        [Authorize(Roles = "admin")]
+        [HttpDelete("{categoriaId:int}", Name = "BorrarCategoria")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> BorrarCategoria(int categoriaId)
+        {
+            var categoriaExiste = await _service.ExisteCategoriaAsync(categoriaId);
+
+            if(!categoriaExiste)
+            {
+                return NotFound();  
+            }
+            var resultado = await _service.DeleteAsync(categoriaId);
+            if (!resultado)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error al eliminar la categoría.");
+            }
+
+            return NoContent();
+
         }
-
-
-
-        //[Authorize(Roles = "admin")]
-        //[HttpPut("{categoriaId:int}", Name = "ActualizarPutCategoria")]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //public IActionResult ActualizarPutCategoria(int categoriaId, [FromBody] CategoriaDto CategoriaDto)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    if (CategoriaDto == null || categoriaId != CategoriaDto.categoriaId)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    var categoriaExistente = _repository.GetCategoria(categoriaId);
-
-        //    if (categoriaExistente == null)
-        //    {
-        //        return NotFound($"No se encontro la categoria con ID {categoriaId}");
-        //    }
-
-
-        //    var categoria = _mapper.Map<Categoria>(CategoriaDto);
-
-
-        //    if (!_repository.Update(categoria))
-        //    {
-        //        ModelState.AddModelError("", $"Algo salió mal actualizando el registro {categoria.categoria_nombre}");
-        //        return StatusCode(500, ModelState);
-        //    }
-        //    return NoContent();
-        //}
-
-
-        //[Authorize(Roles = "admin")]
-        //[HttpDelete("{categoriaId:int}", Name = "BorrarCategoria")]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //public IActionResult BorrarCategoria(int categoriaId)
-        //{
-
-
-        //    if (!_repository.ExisteCategoria(categoriaId))
-        //    {
-        //        return NotFound();
-
-        //    }
-
-
-        //    var categoria = _repository.GetCategoria(categoriaId); 
-
-
-
-        //    if (!_repository.Remove(categoria))
-        //    {
-        //        ModelState.AddModelError("", $"Algo salió mal borrando el registro {categoria.categoria_nombre}");
-        //        return StatusCode(500, ModelState);
-        //    }
-        //    return NoContent();
-        //}
-
     }
+}
+
+
+
 
