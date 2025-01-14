@@ -103,153 +103,153 @@ namespace cursoCore2API.Controllers
 
 
 
-        //[Authorize(Roles = "Admin")]
-        [HttpPost("Create")]
-        [ProducesResponseType(201, Type = typeof(ProductoDto))]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult CrearProducto([FromForm] ProductoInsertDto CrearProductoDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState); 
-            }
-            if (CrearProductoDto == null)
-            {
-                return BadRequest(ModelState); 
-            }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        ////[Authorize(Roles = "Admin")]
+        //[HttpPost("Create")]
+        //[ProducesResponseType(201, Type = typeof(ProductoDto))]
+        //[ProducesResponseType(StatusCodes.Status201Created)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //public IActionResult CrearProducto([FromForm] ProductoInsertDto CrearProductoDto)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState); 
+        //    }
+        //    if (CrearProductoDto == null)
+        //    {
+        //        return BadRequest(ModelState); 
+        //    }
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
            
 
-            if (_prodRepo.ExisteProducto(CrearProductoDto.nombre))
-            {
-                ModelState.AddModelError("", "La categoria ya existe! ");
-                return StatusCode(404, ModelState);
-            }
+        //    if (_prodRepo.ExisteProducto(CrearProductoDto.nombre))
+        //    {
+        //        ModelState.AddModelError("", "La categoria ya existe! ");
+        //        return StatusCode(404, ModelState);
+        //    }
 
-            var producto = _mapper.Map<Producto>(CrearProductoDto);
+        //    var producto = _mapper.Map<Producto>(CrearProductoDto);
 
-            //if (!_prodRepo.CrearProducto(producto))
-            //{
-            //    ModelState.AddModelError("", $"Algo salió mal guardando el registro {producto.nombre}");
-            //    return StatusCode(404, ModelState);
-            //}
+        //    //if (!_prodRepo.CrearProducto(producto))
+        //    //{
+        //    //    ModelState.AddModelError("", $"Algo salió mal guardando el registro {producto.nombre}");
+        //    //    return StatusCode(404, ModelState);
+        //    //}
 
-            //Subir archivo 
+        //    //Subir archivo 
 
-            if (CrearProductoDto.Imagen != null)
-            {
-                string nombreArchivo = producto.idProducto + System.Guid.NewGuid().ToString() + Path.GetExtension(CrearProductoDto.Imagen.FileName) ;
-                string rutaArchivo = @"wwwroot\ImagenesProductos\" + nombreArchivo;
+        //    if (CrearProductoDto.Imagen != null)
+        //    {
+        //        string nombreArchivo = producto.idProducto + System.Guid.NewGuid().ToString() + Path.GetExtension(CrearProductoDto.Imagen.FileName) ;
+        //        string rutaArchivo = @"wwwroot\ImagenesProductos\" + nombreArchivo;
 
-                var ubicacionDirectorio = Path.Combine(Directory.GetCurrentDirectory(), rutaArchivo);
+        //        var ubicacionDirectorio = Path.Combine(Directory.GetCurrentDirectory(), rutaArchivo);
 
-                FileInfo file = new FileInfo(ubicacionDirectorio);
+        //        FileInfo file = new FileInfo(ubicacionDirectorio);
 
-                if (file.Exists)
-                {
-                    file.Delete();
-                }
+        //        if (file.Exists)
+        //        {
+        //            file.Delete();
+        //        }
 
-                using (var fileStream = new FileStream(ubicacionDirectorio, FileMode.Create))
-                {
-                    CrearProductoDto.Imagen.CopyTo(fileStream);
-                }
+        //        using (var fileStream = new FileStream(ubicacionDirectorio, FileMode.Create))
+        //        {
+        //            CrearProductoDto.Imagen.CopyTo(fileStream);
+        //        }
 
-                var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
-                producto.RutaImagen = baseUrl + "/ImagenesProductos/" + nombreArchivo;
-                producto.RutaLocalImagen = rutaArchivo; 
+        //        var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+        //        producto.RutaImagen = baseUrl + "/ImagenesProductos/" + nombreArchivo;
+        //        producto.RutaLocalImagen = rutaArchivo; 
 
 
 
-            }
-            else
-            {
-                producto.RutaImagen = "https://placehold.co/600x400"; 
-            }
+        //    }
+        //    else
+        //    {
+        //        producto.RutaImagen = "https://placehold.co/600x400"; 
+        //    }
 
-            _prodRepo.Add(producto);  
+        //    _prodRepo.Add(producto);  
 
             
-            return CreatedAtRoute("GetProducto", new { productoId = producto.idProducto }, producto);
-        }
+        //    return CreatedAtRoute("GetProducto", new { productoId = producto.idProducto }, producto);
+        //}
 
 
 
-        [Authorize(Roles = "Admin")]
-        [HttpPatch("{productoId:int}", Name = "ActualizarPatchPelicula")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult ActualizarPatchPelicula (int productoId, [FromForm] ProductoUpdateDto ActualizarProductoDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //[Authorize(Roles = "Admin")]
+        //[HttpPatch("{productoId:int}", Name = "ActualizarPatchPelicula")]
+        //[ProducesResponseType(StatusCodes.Status204NoContent)]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //public IActionResult ActualizarPatchPelicula (int productoId, [FromForm] ProductoUpdateDto ActualizarProductoDto)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            if (ActualizarProductoDto == null || productoId != ActualizarProductoDto.idProducto)
-            {
-                return BadRequest(ModelState);
-            }
-
-
-            var categoriaExistente = _prodRepo.GetProducto(productoId);
-
-            if (categoriaExistente == null)
-            {
-                return NotFound($"No se encontro la categoria con ID {productoId}");
-            }
-
-            var producto = _mapper.Map<Producto>(ActualizarProductoDto);
-
-            //if (!_prodRepo.ActualizarProducto(producto))
-            //{
-            //    ModelState.AddModelError("", $"Algo salió mal actualizando el registro {producto.nombre}");
-            //    return StatusCode(500, ModelState);
-            //}
-
-            if (ActualizarProductoDto.Imagen != null)
-            {
-                string nombreArchivo = producto.idProducto + System.Guid.NewGuid().ToString() + Path.GetExtension(ActualizarProductoDto.Imagen.FileName);
-                string rutaArchivo = @"wwwroot\ImagenesProductos\" + nombreArchivo;
-
-                var ubicacionDirectorio = Path.Combine(Directory.GetCurrentDirectory(), rutaArchivo);
-
-                FileInfo file = new FileInfo(ubicacionDirectorio);
-
-                if (file.Exists)
-                {
-                    file.Delete();
-                }
-
-                using (var fileStream = new FileStream(ubicacionDirectorio, FileMode.Create))
-                {
-                    ActualizarProductoDto.Imagen.CopyTo(fileStream);
-                }
-
-                var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
-                producto.RutaImagen = baseUrl + "/ImagenesProductos/" + nombreArchivo;
-                producto.RutaLocalImagen = rutaArchivo;
+        //    if (ActualizarProductoDto == null || productoId != ActualizarProductoDto.idProducto)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
 
+        //    var categoriaExistente = _prodRepo.GetProducto(productoId);
 
-            }
-            else
-            {
-                producto.RutaImagen = "https://placehold.co/600x400";
-            }
+        //    if (categoriaExistente == null)
+        //    {
+        //        return NotFound($"No se encontro la categoria con ID {productoId}");
+        //    }
 
-            _prodRepo.Update(producto);
-            return NoContent();
-        }
+        //    var producto = _mapper.Map<Producto>(ActualizarProductoDto);
+
+        //    //if (!_prodRepo.ActualizarProducto(producto))
+        //    //{
+        //    //    ModelState.AddModelError("", $"Algo salió mal actualizando el registro {producto.nombre}");
+        //    //    return StatusCode(500, ModelState);
+        //    //}
+
+        //    if (ActualizarProductoDto.Imagen != null)
+        //    {
+        //        string nombreArchivo = producto.idProducto + System.Guid.NewGuid().ToString() + Path.GetExtension(ActualizarProductoDto.Imagen.FileName);
+        //        string rutaArchivo = @"wwwroot\ImagenesProductos\" + nombreArchivo;
+
+        //        var ubicacionDirectorio = Path.Combine(Directory.GetCurrentDirectory(), rutaArchivo);
+
+        //        FileInfo file = new FileInfo(ubicacionDirectorio);
+
+        //        if (file.Exists)
+        //        {
+        //            file.Delete();
+        //        }
+
+        //        using (var fileStream = new FileStream(ubicacionDirectorio, FileMode.Create))
+        //        {
+        //            ActualizarProductoDto.Imagen.CopyTo(fileStream);
+        //        }
+
+        //        var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+        //        producto.RutaImagen = baseUrl + "/ImagenesProductos/" + nombreArchivo;
+        //        producto.RutaLocalImagen = rutaArchivo;
+
+
+
+        //    }
+        //    else
+        //    {
+        //        producto.RutaImagen = "https://placehold.co/600x400";
+        //    }
+
+        //    _prodRepo.Update(producto);
+        //    return NoContent();
+        //}
 
 
         //[Authorize(Roles = "Admin")]

@@ -5,6 +5,7 @@ using cursoCore2API.Repository.IRepository;
 using cursoCore2API.Services.IServices;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace cursoCore2API.Services
 {
@@ -68,16 +69,51 @@ namespace cursoCore2API.Services
             throw new NotImplementedException();
         }
 
-        public Task<Categoria> UpdateAsync(int id, CategoriaUpdateDto updateDto)
+        public async Task<Categoria> UpdateAsync(int id, CategoriaUpdateDto updateDto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var categoriaExistente = await _repository.GetByIdAsync(id);
+                if (categoriaExistente == null)
+                {
+                    return null; 
+                }
+
+                _mapper.Map(updateDto, categoriaExistente);
+
+                var result = await _repository.UpdateAsync(categoriaExistente);
+                if (!result)
+                {
+                    return null; 
+                }
+
+                await _repository.SaveChangesAsync();
+
+                return categoriaExistente; 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al actualizar: {ex.Message}");
+                return null;
+            }
         }
 
 
-        public Task<Categoria> GetByIdAsync(int id)
+
+        public async Task<Categoria> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _repository.GetByIdAsync(id);
+
+            if (entity == null)
+            {
+                return null; 
+            }
+
+            var dto = _mapper.Map<Categoria>(entity); 
+
+            return dto;
         }
+
 
         public Task<IEnumerable<Categoria>> GetAllAsync()
         {
@@ -94,6 +130,6 @@ namespace cursoCore2API.Services
             throw new NotImplementedException();
         }
 
-       
+        
     }
 }

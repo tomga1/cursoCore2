@@ -8,6 +8,8 @@ namespace cursoCore2API.Services.IServices
         Task<List<CategoriaDto>> GetCategoriasAsync();
         Task<CategoriaDto> GetCategoriaByIdAsync(int id);
         Task<bool> ExisteCategoriaAsync(int id);
+        Task<Categoria> UpdateAsync(int id, CategoriaUpdateDto updateDto); 
+
 
     }
 }

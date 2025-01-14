@@ -11,6 +11,7 @@ using XAct;
 using cursoCore2API.Services.IServices;
 using XAct.Messages;
 using XAct.Services;
+using System.Runtime.CompilerServices;
 
 
 
@@ -100,7 +101,7 @@ namespace cursoCore2API.Controllers
 
             var categoria = _mapper.Map<Categoria>(crearCategoriaDto);
 
-            if (!_repository.Add(categoria))
+            if (_repository.AddAsync(categoria) == null)
             {
                 ModelState.AddModelError("", $"Algo salió mal guardando el registro {categoria.categoria_nombre}");
                 return StatusCode(404, ModelState);
@@ -109,93 +110,45 @@ namespace cursoCore2API.Controllers
         }
 
 
+        [Authorize(Roles = "admin")]
+        [HttpPatch("{categoriaId:int}", Name = "ActualizarPatchCategoria")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ActualizarPatchCategoria(int categoriaId, [FromBody] CategoriaUpdateDto categoriaUpdateDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (categoriaUpdateDto == null || categoriaId != categoriaUpdateDto.categoriaId)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Verificamos si la categoría existe
+            var categoriaExistente = await _service.GetByIdAsync(categoriaId);
+
+            if (categoriaExistente == null)  
+            {
+                return NotFound($"No se encontró la categoría con ID {categoriaId}");
+            }
+
+            // Llamamos al servicio para actualizar la entidad usando el DTO
+            var actualizado = await _service.UpdateAsync(categoriaId, categoriaUpdateDto);
+
+            if (actualizado == null)
+            {
+                ModelState.AddModelError("", "Algo salió mal actualizando el registro");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent(); // Si todo fue bien, devolvemos NoContent
+        }
 
 
-
-
-
-
-
-
-
-
-
-
-        //[Authorize(Roles = "admin")]
-        //[HttpPatch("{categoriaId:int}", Name = "ActualizarPatchCategoria")]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //public IActionResult ActualizarPatchCategoria(int categoriaId, [FromBody] CategoriaDto CategoriaDto)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    if (CategoriaDto == null || categoriaId != CategoriaDto.categoriaId)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-
-        //    var categoriaExistente = _repository.GetCategoria(categoriaId);
-
-        //    if (categoriaExistente == null)
-        //    {
-        //        return NotFound($"No se encontro la categoria con ID {categoriaId}");
-        //    }
-
-        //    var categoria = _mapper.Map<Categoria>(CategoriaDto);
-
-        //    if (!_repository.Update(categoria))
-        //    {
-        //        ModelState.AddModelError("", $"Algo salió mal actualizando el registro {categoria.categoria_nombre}");
-        //        return StatusCode(500, ModelState);
-        //    }
-        //    return NoContent();
-        
-
-
-
-    //[Authorize(Roles = "admin")]
-    //[HttpPut("{categoriaId:int}", Name = "ActualizarPutCategoria")]
-    //[ProducesResponseType(StatusCodes.Status204NoContent)]
-    //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-    //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    //[ProducesResponseType(StatusCodes.Status404NotFound)]
-    //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    //public IActionResult ActualizarPutCategoria(int categoriaId, [FromBody] CategoriaDto CategoriaDto)
-    //{
-    //    if (!ModelState.IsValid)
-    //    {
-    //        return BadRequest(ModelState);
-    //    }
-
-    //    if (CategoriaDto == null || categoriaId != CategoriaDto.categoriaId)
-    //    {
-    //        return BadRequest(ModelState);
-    //    }
-
-    //    var categoriaExistente = _repository.GetCategoria(categoriaId);
-
-    //    if (categoriaExistente == null)
-    //    {
-    //        return NotFound($"No se encontro la categoria con ID {categoriaId}");
-    //    }
-
-
-    //    var categoria = _mapper.Map<Categoria>(CategoriaDto);
-
-
-    //    if (!_repository.Update(categoria))
-    //    {
-    //        ModelState.AddModelError("", $"Algo salió mal actualizando el registro {categoria.categoria_nombre}");
-    //        return StatusCode(500, ModelState);
-    //    }
-    //    return NoContent();
-    //}
 
 
         [Authorize(Roles = "admin")]
@@ -222,6 +175,46 @@ namespace cursoCore2API.Controllers
             return NoContent();
 
         }
+
+
+        
+        //[Authorize(Roles = "admin")]
+        [HttpPut("{categoriaId:int}", Name = "ActualizarPutCategoria")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async  Task<IActionResult> ActualizarPutCategoria(int categoriaId, [FromBody] CategoriaUpdateDto categoriaUpdateDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (categoriaUpdateDto == null || categoriaId != categoriaUpdateDto.categoriaId)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var categoriaExistente = _service.GetCategoriaByIdAsync(categoriaId);
+
+            if (categoriaExistente == null)
+            {
+                return NotFound($"No se encontro la categoria con ID {categoriaId}");
+            }
+
+            var resultado = await _service.UpdateAsync(categoriaId, categoriaUpdateDto);
+
+            if (resultado == null)  
+            {
+                ModelState.AddModelError("", $"Algo salió mal actualizando el registro {categoriaUpdateDto.categoria_nombre}");
+                return StatusCode(500, ModelState);
+            }
+            return NoContent();
+        }
+
+
     }
 }
 

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using cursoCore2API.DTOs;
 using cursoCore2API.Repository.IRepository;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace cursoCore2API.Services.IServices
 {
@@ -17,15 +19,22 @@ namespace cursoCore2API.Services.IServices
             _mapper = mapper;
         }
 
-        public Task<T> AddAsync(TCreateDto createDto)
+        public async Task<T> AddAsync(TCreateDto createDto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var entity = _mapper.Map<T>(createDto);
+                await _repository.AddAsync(entity);
+                await _repository.SaveChangesAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                _errors.Add(ex.Message);
+                return null;
+            }
         }
 
-        public Task<T> UpdateAsync(int id, TUpdateDto updateDto)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<bool> DeleteAsync(int id)
         {
@@ -42,30 +51,23 @@ namespace cursoCore2API.Services.IServices
         public async Task<T> GetByIdAsync(int id)
         {
             var entity = await _repository.GetByIdAsync(id);
-
-            if (entity == null)
-            {
-                return default; 
-            }
-            
-            var dto = _mapper.Map<T>(entity);
-
-            return dto;
+            return entity != null ? _mapper.Map<T>(entity) : null;
         }
 
-        public Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var entities = await _repository.GetAllAsync();
+            return _mapper.Map<IEnumerable<T>>(entities);
         }
 
         public bool Validate(TCreateDto dto)
         {
-            throw new NotImplementedException();
+            return true; 
         }
 
         public bool Validate(TUpdateDto dto)
         {
-            throw new NotImplementedException();
+            return true; 
         }
     }
 }

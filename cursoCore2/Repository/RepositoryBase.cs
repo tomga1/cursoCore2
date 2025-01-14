@@ -17,16 +17,17 @@ namespace cursoCore2API.Repository
             _dbSet = _context.Set<T>();
         }
 
-        public virtual bool Add(T entity)
+        public async Task<bool> AddAsync(T entity)
         {
-            _dbSet.Add(entity);
-            return SaveChanges();
+            await _dbSet.AddAsync(entity);
+            return true; 
         }
 
-        public bool Update(T entity)
+        public async Task<bool> UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
-            return SaveChanges();
+            return await SaveChangesAsync();
+            
         }
 
         public async Task<bool> RemoveAsync(T entity)
@@ -40,9 +41,9 @@ namespace cursoCore2API.Repository
             return await _dbSet.FindAsync(id);
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return _dbSet.ToList();
+            return await _dbSet.ToListAsync(); 
         }
 
         public IEnumerable<T> Find(Expression<Func<T, bool>> predicate)

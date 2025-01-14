@@ -22,6 +22,8 @@ namespace cursoCore2API.AutoMappers
 
             CreateMap<Categoria, CategoriaDto>().ReverseMap();
             CreateMap<Categoria, CategoriaInsertDto>().ReverseMap();
+            CreateMap<Categoria, CategoriaUpdateDto>().ReverseMap();
+
 
             CreateMap<User, UsuarioDto>().ReverseMap();
             CreateMap<User, UsuarioInsertDto>().ReverseMap();
