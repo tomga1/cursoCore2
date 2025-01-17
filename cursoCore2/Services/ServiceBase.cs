@@ -24,9 +24,14 @@ namespace cursoCore2API.Services.IServices
             try
             {
                 var entity = _mapper.Map<T>(createDto);
-                await _repository.AddAsync(entity);
-                await _repository.SaveChangesAsync();
-                return entity;
+                var result = await _repository.AddAsync(entity);
+                if (result)
+                {
+                    return entity;  
+                }
+                _errors.Add("Error al guardar la entidad.");
+                return null; 
+               
             }
             catch (Exception ex)
             {

@@ -16,11 +16,13 @@ namespace cursoCore2API.Services
 
         public IReadOnlyList<string> Errors => throw new NotImplementedException();
 
-        public CategoriaService(ICategoriaRepository repository, IMapper mapper)
+        public CategoriaService(ICategoriaRepository repository, IMapper mapper) 
         {
             _repository = repository;
             _mapper = mapper;
         }
+
+
 
         public async Task<List<CategoriaDto>> GetCategoriasAsync()
         {
@@ -49,6 +51,12 @@ namespace cursoCore2API.Services
             var categoria = await _repository.GetByIdAsync(categoriaId);
             return categoria != null;
              
+        }
+        public async Task<bool> ExisteCategoriaAsync(string categoriaNombre)
+        {
+            var categoria = await _repository.ExisteCategoria(categoriaNombre);
+            return categoria != null;
+
         }
 
         public async Task<bool> DeleteAsync(int id)

@@ -20,7 +20,7 @@ namespace cursoCore2API.Repository
         public async Task<bool> AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
-            return true; 
+            return await SaveChangesAsync(); 
         }
 
         public async Task<bool> UpdateAsync(T entity)
@@ -59,5 +59,7 @@ namespace cursoCore2API.Repository
         {
             return await _context.SaveChangesAsync() > 0;
         }
+       
+
     }
 }

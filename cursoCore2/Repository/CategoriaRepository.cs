@@ -26,9 +26,9 @@ namespace cursoCore2API.Repository
             return _dbSet.Any(c => c.categoriaId == id); 
         }
 
-        public bool ExisteCategoria(string nombre)
+        public async Task<bool> ExisteCategoria(string nombre)
         {
-            return _dbSet.Any(c => c.categoria_nombre.ToLower().Trim() == nombre.ToLower().Trim());
+            return await _dbSet.AnyAsync(c => c.categoria_nombre.ToLower().Trim() == nombre.ToLower().Trim());
         }
     }
 }

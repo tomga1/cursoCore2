@@ -72,41 +72,30 @@ namespace cursoCore2API.Controllers
             
         }
 
-
-
-
         //[Authorize(Roles = "admin")]
+        [AllowAnonymous]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public IActionResult CrearCategoria([FromBody] CategoriaInsertDto crearCategoriaDto)
+        [HttpPost]
+        public async Task<IActionResult> CrearCategoria([FromBody] CategoriaInsertDto categoriaInsertDto)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState); 
-            }
-            if (crearCategoriaDto == null)
-            {
-                return BadRequest(ModelState); 
-            }
-            
-
-            if (_repository.ExisteCategoria(crearCategoriaDto.categoria_nombre))
-            {
-                ModelState.AddModelError("", "La categoria ya existe! ");
-                return StatusCode(404, ModelState);
+                return BadRequest(ModelState);
             }
 
-            var categoria = _mapper.Map<Categoria>(crearCategoriaDto);
+            var resultado = await _serviceBase.AddAsync(categoriaInsertDto); // Usa Dto para crear
 
-            if (_repository.AddAsync(categoria) == null)
+            if (resultado == null)
             {
-                ModelState.AddModelError("", $"Algo salió mal guardando el registro {categoria.categoria_nombre}");
-                return StatusCode(404, ModelState);
+                return StatusCode(500, new { message = $"Algo salió mal guardando el registro {categoriaInsertDto.categoria_nombre}" });
             }
-            return CreatedAtRoute("GetCategoria", new { categoriaId = categoria.categoriaId }, categoria);
+
+            var categoria = _mapper.Map<Categoria>(resultado); // Mapear a Categoria si es necesario
+            return CreatedAtRoute("GetCategoria", new { categoriaId = categoria.categoriaId }, categoriaInsertDto);
         }
 
 
@@ -149,8 +138,6 @@ namespace cursoCore2API.Controllers
         }
 
 
-
-
         [Authorize(Roles = "admin")]
         [HttpDelete("{categoriaId:int}", Name = "BorrarCategoria")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -177,7 +164,6 @@ namespace cursoCore2API.Controllers
         }
 
 
-        
         //[Authorize(Roles = "admin")]
         [HttpPut("{categoriaId:int}", Name = "ActualizarPutCategoria")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

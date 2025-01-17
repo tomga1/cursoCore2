@@ -7,7 +7,7 @@ namespace cursoCore2API.Repository.IRepository
         Task<ICollection<Categoria>> GetCategoriasAsync();
         Task<Categoria> GetCategoriaByid(int categoriaId);
         bool ExisteCategoria(int id);
-        bool ExisteCategoria(string nombre);
+        Task<bool> ExisteCategoria(string nombre);
 
 
         //bool CrearCategoria(Categoria categoria);
