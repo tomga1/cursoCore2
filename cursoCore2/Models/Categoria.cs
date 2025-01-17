@@ -2,12 +2,12 @@
 
 namespace cursoCore2API.Models
 {
-    public class Categoria
+    public class Categoria : EntityBase
     {
-        [Key]
-        public int categoriaId { get; set; }
-        [Required]  
-        public string? categoria_nombre { get; set; }
+        //[Key]
+        //public int Id { get; set; }
+        //[Required]  
+        //public string? categoria_nombre { get; set; }
         [Required]
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
     }

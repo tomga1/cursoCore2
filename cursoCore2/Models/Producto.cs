@@ -5,14 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace cursoCore2API.Models
 {
-    public class Producto
+    public class Producto : EntityBase
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int idProducto { get; set; }
+        //[Key]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        //public int idProducto { get; set; }
 
-        [Required]
-        public string? nombre { get; set; }
+        //[Required]
+        //public string? nombre { get; set; }
 
         [Required]
         public int stock { get; set; }

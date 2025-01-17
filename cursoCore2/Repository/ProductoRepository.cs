@@ -22,12 +22,12 @@ namespace cursoCore2API.Repository
 
         public Producto GetProducto(int productoId)
         {
-            return _dbSet.FirstOrDefault(c => c.idProducto == productoId);
+            return _dbSet.FirstOrDefault(c => c.Id == productoId);
         }
 
         public bool ExisteProducto(int id)
         {
-            return _dbSet.Any(c => c.idProducto == id); 
+            return _dbSet.Any(c => c.Id == id); 
         }
 
         public bool ExisteProducto(string nombre)

@@ -3,10 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Collections.Generic;
 using cursoCore2API.Repository.IRepository;
+using cursoCore2API.Models;
 
 namespace cursoCore2API.Repository
 {
-    public class RepositoryBase<T> : IRepositoryBase<T> where T : class
+    public class RepositoryBase<T> : IRepositoryBase<T> where T : EntityBase
     {
         protected readonly StoreContext _context;
         protected readonly DbSet<T> _dbSet;

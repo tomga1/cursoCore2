@@ -6,6 +6,6 @@ namespace cursoCore2API.DTOs
     {
         [Required(ErrorMessage = "El nombre es obligatorio")]
         [MaxLength(100, ErrorMessage = "El numero maximo de caracteres es de 100!")]
-        public string? categoria_nombre { get; set; }
+        public string? nombre { get; set; }
     }
 }

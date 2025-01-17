@@ -13,22 +13,22 @@ namespace cursoCore2API.Repository
 
         public async Task<ICollection<Categoria>> GetCategoriasAsync()
         {
-            return await _dbSet.OrderBy(c => c.categoria_nombre).ToListAsync();
+            return await _dbSet.OrderBy(c => c.nombre).ToListAsync();
         }
 
         public async Task<Categoria> GetCategoriaByid(int categoriaId)
         {
-            return await _dbSet.FirstOrDefaultAsync(c => c.categoriaId == categoriaId);
+            return await _dbSet.FirstOrDefaultAsync(c => c.Id == categoriaId);
         }
 
         public bool ExisteCategoria(int id)
         {
-            return _dbSet.Any(c => c.categoriaId == id); 
+            return _dbSet.Any(c => c.Id == id); 
         }
 
         public async Task<bool> ExisteCategoria(string nombre)
         {
-            return await _dbSet.AnyAsync(c => c.categoria_nombre.ToLower().Trim() == nombre.ToLower().Trim());
+            return await _dbSet.AnyAsync(c => c.nombre.ToLower().Trim() == nombre.ToLower().Trim());
         }
     }
 }

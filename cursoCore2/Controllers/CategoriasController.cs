@@ -88,11 +88,11 @@ namespace cursoCore2API.Controllers
 
             if (resultado == null)
             {
-                return StatusCode(500, new { message = $"Algo salió mal guardando el registro {categoriaInsertDto.categoria_nombre}" });
+                return StatusCode(500, new { message = $"Algo salió mal guardando el registro {categoriaInsertDto.nombre}" });
             }
 
             var categoria = _mapper.Map<Categoria>(resultado); // Mapear a Categoria si es necesario
-            return CreatedAtRoute("GetCategoria", new { categoriaId = categoria.categoriaId }, categoriaInsertDto);
+            return CreatedAtRoute("GetCategoria", new { categoriaId = categoria.Id }, categoriaInsertDto);
         }
 
 
@@ -109,7 +109,7 @@ namespace cursoCore2API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (categoriaUpdateDto == null || categoriaId != categoriaUpdateDto.categoriaId)
+            if (categoriaUpdateDto == null || categoriaId != categoriaUpdateDto.Id)
             {
                 return BadRequest(ModelState);
             }
@@ -175,7 +175,7 @@ namespace cursoCore2API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (categoriaUpdateDto == null || categoriaId != categoriaUpdateDto.categoriaId)
+            if (categoriaUpdateDto == null || categoriaId != categoriaUpdateDto.Id)
             {
                 return BadRequest("La información de la categoría no es válida.");
             }
@@ -191,7 +191,7 @@ namespace cursoCore2API.Controllers
 
             if (resultado == null)  
             {
-                return StatusCode(500, new { message = $"Algo salió mal actualizando el registro {categoriaUpdateDto.categoria_nombre}" });
+                return StatusCode(500, new { message = $"Algo salió mal actualizando el registro {categoriaUpdateDto.nombre}" });
             }
             return NoContent();
         }
