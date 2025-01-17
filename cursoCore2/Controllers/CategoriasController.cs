@@ -1,5 +1,4 @@
 ﻿using cursoCore2API.DTOs;
-using cursoCore2API.Repository.IRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
@@ -23,15 +22,13 @@ namespace cursoCore2API.Controllers
     [AllowAnonymous]
     public class CategoriasController : ControllerBase
     {
-        private readonly ICategoriaRepository _repository;
         private readonly IMapper _mapper;
         private readonly ICategoriaService _service;
         private readonly IServiceBase<Categoria, CategoriaInsertDto, CategoriaUpdateDto> _serviceBase;
         private readonly IMessageService _messageService;
 
-        public CategoriasController(ICategoriaRepository repository, IMapper mapper, ICategoriaService service, IMessageService messageService, IServiceBase<Categoria, CategoriaInsertDto, CategoriaUpdateDto> serviceBase)
+        public CategoriasController(IMapper mapper, ICategoriaService service, IMessageService messageService, IServiceBase<Categoria, CategoriaInsertDto, CategoriaUpdateDto> serviceBase)
         {
-            _repository = repository;  
             _mapper = mapper; 
             _service = service; 
             _serviceBase = serviceBase;
@@ -58,7 +55,7 @@ namespace cursoCore2API.Controllers
         public async Task<IActionResult> GetCategoriaById(int categoriaId)
         {
            
-                var itemCategoria = await _service.GetCategoriaByIdAsync(categoriaId);
+                var itemCategoria = await _service.GetByIdAsync(categoriaId);
 
                 if (itemCategoria == null)
                 {
