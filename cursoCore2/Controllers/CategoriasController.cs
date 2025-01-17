@@ -194,10 +194,10 @@ namespace cursoCore2API.Controllers
 
             if (categoriaUpdateDto == null || categoriaId != categoriaUpdateDto.categoriaId)
             {
-                return BadRequest(ModelState);
+                return BadRequest("La información de la categoría no es válida.");
             }
 
-            var categoriaExistente = _service.GetCategoriaByIdAsync(categoriaId);
+            var categoriaExistente = await _service.GetCategoriaByIdAsync(categoriaId);
 
             if (categoriaExistente == null)
             {
@@ -208,8 +208,7 @@ namespace cursoCore2API.Controllers
 
             if (resultado == null)  
             {
-                ModelState.AddModelError("", $"Algo salió mal actualizando el registro {categoriaUpdateDto.categoria_nombre}");
-                return StatusCode(500, ModelState);
+                return StatusCode(500, new { message = $"Algo salió mal actualizando el registro {categoriaUpdateDto.categoria_nombre}" });
             }
             return NoContent();
         }
