@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using cursoCore2API.Services.IServices;
+using Serilog; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,6 +68,7 @@ builder.Services.AddScoped(typeof(IServiceBase<,,>), typeof(ServiceBase<,,>));
 
 
 var key = builder.Configuration.GetValue<string>("Authentication:SecretForKey");
+
 
 
 
@@ -158,6 +160,21 @@ builder.Services.AddAuthentication
         };
 
     });
+
+//CONFIGURACION DE SERILOG
+
+builder.Host
+    .UseSerilog((context, services, configuration) =>
+    {
+        configuration
+            .ReadFrom.Configuration(context.Configuration)
+            .Enrich.FromLogContext();
+    })
+    .ConfigureLogging(logging =>
+    {
+        logging.ClearProviders();
+    });
+
 
 
 var app = builder.Build();
